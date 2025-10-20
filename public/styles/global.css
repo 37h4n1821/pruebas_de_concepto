@@ -1,0 +1,29 @@
+:root{
+    ---color_primario_1:#0861e6;
+    ---color_primario_2:#ffffff;
+
+    --color_sobreado_1:#007bff;
+
+    ---color_texto_titulos:#ffffff;
+    ---color_texto_titulos_2:#090909;
+    ---color_texto_titulos_3:#eaf0ff;
+    ---color_texto_titulos_4:#0066ff;
+    ---color_texto_general:#ffffff;
+
+    ---color_fondo_primario:whitesmoke;
+    ---color_fondo_secundario:white;
+    ---color_fondo_terciario:rgb(37, 29, 79);
+
+    ---color_principal_tecbit: #2b7ffd;
+
+
+    --md-sys-color-primary:var(---color_primario_1);
+    --md-sys-color-surface-container-highest: transparent;
+}
+
+@font-face {
+    font-family: 'Tecbit';
+    src: url('/assets/fonts/Tecbit-Font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

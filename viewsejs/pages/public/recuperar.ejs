@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cibervoluntarios - Autenticación</title>
+    <link rel="shortcut icon" href="/iconos/Ciber.ico">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>.password-strength {
+            height: 5px;
+            margin-top: 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .strength-text {
+            font-size: 0.85rem;
+            margin-top: 5px;
+            text-align: left;
+        }</style>
+
+    <link href="/css/auth.css" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="row g-0">
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="illustration-side">
+                    <div class="illustration-content">
+                        <div class="illustration-title">Conectando voluntarios con causas digitales</div>
+                        <img src="https://i.imgur.com/bguYQFJ.png" class="illustration-img" alt="Cibervoluntarios">
+                        <p class="illustration-text">Únete a nuestra comunidad de cibervoluntarios y ayuda a construir un mundo digital más inclusivo para todos.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-side">
+                    <div class="logo">
+                        <div class="logo-text">Ciber<span>Voluntarios</span></div>
+                    </div>
+                    
+                 
+                    
+                    
+                    
+                    <!-- Formulario de Recuperación de Contraseña (oculto inicialmente) -->
+                    <div id="recoverPassword" class="" >
+                        <div class="text-center mb-4">
+                            <h2 class="form-title">Restablecer contraseña</h2>
+                            <p class="text-muted">Ingrese una nueva contraseña.</p>
+                        </div>
+                        
+                        <form class="user" id="recoverForm">
+                            <div class="form-group">
+                                    <i class="fas fa-lock input-icon"></i>
+                                <input type="password" name="contrasegnaRestablecer" class="form-control form-control-user" id="restablecerContra" placeholder="*****" required>
+                                <i class="fas fa-eye-slash password-toggle" id="toggleRegisterPassword"></i>
+                                
+                            </div>
+                            <div class="password-strength" id="passwordStrength"></div>
+                                <div class="strength-text  mb-3" id="strengthText"></div>
+                            <div class="form-group">
+                                    <i class="fas fa-lock input-icon"></i>
+                                <input type="password" name="contrasegnaRestablecerVerificar" class="form-control form-control-user" id="restablecerContraVerificar" placeholder="*****" required>
+                                <i class="fas fa-eye-slash password-toggle" id="toggleRegisterConfirmPassword"></i>
+                                        
+
+                            </div>
+                            <div id="passwordMatch" class="strength-text  mb-3"></div>
+                            <button type="submit" class="btn btn-primary btn-user btn-block w-100 mb-3">
+                                Restablecer contraseña
+                            </button>
+                        </form>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Bootstrap & jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos DOM
+            const passwordInput = document.getElementById('restablecerContra');
+            const confirmPasswordInput = document.getElementById('restablecerContraVerificar');
+            const togglePassword = document.getElementById('toggleRegisterPassword');
+            const toggleConfirmPassword = document.getElementById('toggleRegisterConfirmPassword');
+            const passwordStrength = document.getElementById('passwordStrength');
+            const strengthText = document.getElementById('strengthText');
+            const passwordMatch = document.getElementById('passwordMatch');
+            
+            // Funcionalidad para mostrar/ocultar contraseña
+            togglePassword.addEventListener('click', function() {
+                togglePasswordVisibility(passwordInput, togglePassword);
+            });
+            
+            toggleConfirmPassword.addEventListener('click', function() {
+                togglePasswordVisibility(confirmPasswordInput, toggleConfirmPassword);
+            });
+            
+            function togglePasswordVisibility(input, toggleIcon) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+                } else {
+                    input.type = 'password';
+                    toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+                }
+            }
+            
+            // Verificación de fortaleza de contraseña
+            passwordInput.addEventListener('input', function() {
+                checkPasswordStrength(passwordInput.value);
+                checkPasswordMatch();
+            });
+            
+            confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+            
+            function checkPasswordStrength(password) {
+                // Inicializar puntuación
+                let strength = 0;
+                let messages = [];
+                
+                // Verificar longitud
+                if (password.length >= 8) {
+                    strength += 20;
+                } else {
+                    messages.push("Mínimo 8 caracteres");
+                }
+                
+                // Verificar letras minúsculas
+                if (/[a-z]/.test(password)) {
+                    strength += 20;
+                } else {
+                    messages.push("Una letra minúscula");
+                }
+                
+                // Verificar letras mayúsculas
+                if (/[A-Z]/.test(password)) {
+                    strength += 20;
+                } else {
+                    messages.push("Una letra mayúscula");
+                }
+                
+                // Verificar números
+                if (/[0-9]/.test(password)) {
+                    strength += 20;
+                } else {
+                    messages.push("Al menos un número");
+                }
+                
+                // Verificar caracteres especiales
+                if (/[^A-Za-z0-9]/.test(password)) {
+                    strength += 20;
+                } else {
+                    messages.push("Un carácter especial");
+                }
+                
+                // Actualizar la barra de fortaleza y el texto
+                updateStrengthIndicator(strength, messages);
+            }
+            
+            function updateStrengthIndicator(strength, messages) {
+                // Actualizar barra de progreso
+                passwordStrength.style.width = strength + '%';
+                
+                // Cambiar color según la fortaleza
+                if (strength < 40) {
+                    passwordStrength.style.backgroundColor = '#dc3545'; // Rojo
+                    strengthText.textContent = 'Contraseña débil: ' + messages.join(', ');
+                    strengthText.style.color = '#dc3545';
+                } else if (strength < 80) {
+                    passwordStrength.style.backgroundColor = '#ffc107'; // Amarillo
+                    strengthText.textContent = 'Contraseña media: ' + messages.join(', ');
+                    strengthText.style.color = '#ffc107';
+                } else {
+                    passwordStrength.style.backgroundColor = '#28a745'; // Verde
+                    strengthText.textContent = 'Contraseña fuerte';
+                    strengthText.style.color = '#28a745';
+                }
+                
+                // Ocultar mensaje si no hay contraseña
+                if (passwordInput.value === '') {
+                    strengthText.textContent = '';
+                    passwordStrength.style.width = '0%';
+                }
+            }
+            
+            function checkPasswordMatch() {
+                if (confirmPasswordInput.value === '') {
+                    passwordMatch.textContent = '';
+                    confirmPasswordInput.style.borderColor = '';
+                } else if (passwordInput.value !== confirmPasswordInput.value) {
+                    passwordMatch.textContent = 'Las contraseñas no coinciden';
+                    passwordMatch.style.color = '#dc3545';
+                    confirmPasswordInput.style.borderColor = '#dc3545';
+                } else {
+                    passwordMatch.textContent = 'Las contraseñas coinciden';
+                    passwordMatch.style.color = '#28a745';
+                    confirmPasswordInput.style.borderColor = '#28a745';
+                }
+            }
+            
+            // Validación del formulario
+            document.getElementById('recoverForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (passwordInput.value !== confirmPasswordInput.value) {
+                    alert('Las contraseñas no coinciden. Por favor, verifique.');
+                    return;
+                }
+                
+                if (passwordInput.value.length < 8) {
+                    alert('La contraseña debe tener al menos 8 caracteres.');
+                    return;
+                }
+                
+                // Si todo está bien, enviar el formulario
+                alert('Contraseña restablecida con éxito!');
+                // Aquí normalmente enviarías el formulario al servidor
+            });
+        });
+
+
+        document.getElementById("recoverForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const password = document.getElementById("restablecerContra").value;
+    const confirm = document.getElementById("restablecerContraVerificar").value;
+    const token = window.location.pathname.split("/").pop(); // obtiene el token de la URL
+
+    if (password !== confirm) {
+        return Swal.fire("Error", "Las contraseñas no coinciden", "error");
+    }
+
+    try {
+        const res = await fetch(`/reset-password/${token}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ contrasegnaRestablecer: password }),
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            Swal.fire("Éxito", data.success, "success").then(() => {
+                window.location.href = "/auth"; // redirigir al login
+            });
+        } else {
+            Swal.fire("Error", data.error, "error");
+        }
+    } catch (err) {
+        console.error(err);
+        Swal.fire("Error", "Error interno del servidor", "error");
+    }
+});
+    </script>
+  
+</body>
+</html>

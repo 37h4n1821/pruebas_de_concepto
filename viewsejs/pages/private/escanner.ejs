@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es-cl">
+
+<head>
+    <%- include('../../modulos/head.ejs'); %>
+    <meta name="description" content="Cibervoluntarios de DUOC UC">
+    <meta name="author" content="Tecbit">
+
+    <title>Cibervoluntarios</title>
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <%- include('../../modulos/slidebar.ejs'); %>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+                <%- include('../../modulos/navbar.ejs'); %>
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Content Row -->
+                    <div class="row d-flex justify-content-center">
+
+                        <div class="card shadow mb-4 mx-2">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Escaner universal de eventos</h6>
+                            </div>
+                            <div class="card-body">
+                                <p>Escanea la entrada aquí.</p>
+
+                                <div class="d-flex justify-content-center">
+                                    <div class="barcode-wrapper" id="barcode-container">
+                                        <div id="reader" style="width:100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="card shadow mb-4 mx-2">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Información escaneada</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail" placeholder="Nombre completo" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail" placeholder="Dirección de correo" disabled>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail" placeholder="Evento al que asiste" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <%- include('../../modulos/footer.ejs'); %>
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    
+    
+    <%- include('../../modulos/scripts_globales.ejs'); %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+    <script>
+        function scannerTranslator() {
+        const traducciones = [
+            {original: "QR code parse error, error =", traduccion: "Error al analizar el código QR, error ="},
+            {original: "Error getting userMedia, error =", traduccion: "Error al obtener userMedia, error ="},
+            {original: "The device doesn't support navigator.mediaDevices , only supported cameraIdOrConfig in this case is deviceId parameter (string).", traduccion: "El dispositivo no admite navigator.mediaDevices, en este caso sólo se admite cameraIdOrConfig como parámetro deviceId (cadena)."},
+            {original: "Camera streaming not supported by the browser.", traduccion: "El navegador no admite la transmisión de la cámara."},
+            {original: "Unable to query supported devices, unknown error.", traduccion: "No se puede consultar los dispositivos compatibles, error desconocido."},
+            {original: "Camera access is only supported in secure context like https or localhost.", traduccion: "El acceso a la cámara sólo es compatible en un contexto seguro como https o localhost."},
+            {original: "Scanner paused", traduccion: "Escáner en pausa"},
+            {original: "Scanning", traduccion: "Escaneando"},
+            {original: "Idle", traduccion: "Inactivo"},
+            {original: "Error", traduccion: "Error"},
+            {original: "Permission", traduccion: "Permiso"},
+            {original: "No Cameras", traduccion: "Sin cámaras"},
+            {original: "Last Match:", traduccion: "Última coincidencia:"},
+            {original: "Code Scanner", traduccion: "Escáner de código"},
+            {original: "Request Camera Permissions", traduccion: "Solicitar permisos de cámara"},
+            {original: "Requesting camera permissions...", traduccion: "Solicitando permisos de cámara..."},
+            {original: "No camera found", traduccion: "No se encontró ninguna cámara"},
+            {original: "Stop Scanning", traduccion: "Detener escaneo"},
+            {original: "Start Scanning", traduccion: "Iniciar escaneo"},
+            {original: "Switch On Torch", traduccion: "Encender linterna"},
+            {original: "Switch Off Torch", traduccion: "Apagar linterna"},
+            {original: "Failed to turn on torch", traduccion: "Error al encender la linterna"},
+            {original: "Failed to turn off torch", traduccion: "Error al apagar la linterna"},
+            {original: "Launching Camera...", traduccion: "Iniciando cámara..."},
+            {original: "Scan an Image File", traduccion: ""},
+            {original: "Scan using camera directly", traduccion: "Escanear usando la cámara directamente"},
+            {original: "Select Camera", traduccion: "Seleccionar cámara"},
+            {original: "Choose Image", traduccion: "Elegir imagen"},
+            {original: "Choose Another", traduccion: "Elegir otra"},
+            {original: "No image choosen", traduccion: "Ninguna imagen seleccionada"},
+            {original: "Anonymous Camera", traduccion: "Cámara anónima"},
+            {original: "Or drop an image to scan", traduccion: "O arrastra una imagen para escanear"},
+            {original: "Or drop an image to scan (other files not supported)", traduccion: "O arrastra una imagen para escanear (otros archivos no soportados)"},
+            {original: "zoom", traduccion: "zoom"},
+            {original: "Loading image...", traduccion: "Cargando imagen..."},
+            {original: "Camera based scan", traduccion: "Escaneo basado en cámara"},
+            {original: "Fule based scan", traduccion: "Escaneo basado en archivo"},
+            {original: "Powered by ", traduccion: ""},
+            {original: "Report issues", traduccion: ""},
+            {original: "NotAllowedError: Permission denied", traduccion: "Permiso denegado para acceder a la cámara"}
+        ];
+
+        function traducirTexto(texto) {
+            const traduccion = traducciones.find(t => t.original === texto);
+            return traduccion ? traduccion.traduccion : texto;
+        }
+
+        function traducirNodosDeTexto(nodo) {
+            if (nodo.nodeType === Node.TEXT_NODE) {
+                nodo.textContent = traducirTexto(nodo.textContent.trim());
+            } else {
+                for (let i = 0; i < nodo.childNodes.length; i++) {
+                    traducirNodosDeTexto(nodo.childNodes[i]);
+                }
+            }
+        }
+
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach((nodo) => {
+                        traducirNodosDeTexto(nodo);
+                    });
+                }
+            });
+        });
+
+        const config = {childList: true, subtree: true};
+        observer.observe(document.body, config);
+
+        traducirNodosDeTexto(document.body);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        scannerTranslator(document.querySelector('#qr-reader'));
+    });
+
+    const correcto = document.getElementById('correcto');
+    const incorrecto = document.getElementById('incorrecto');
+
+
+    const scanner = new Html5QrcodeScanner('reader', { 
+        qrbox: {
+            width: 200,
+            height: 200,
+        },
+        fps: 20,
+    });
+
+
+    var pausa=false;
+
+
+
+    scanner.render(success, error);
+
+
+    function error(result) {
+        console.log(result);
+
+    }
+
+
+    function success(result) {
+        console.log(result);
+        if(!pausa){
+            pausa=true;
+            if(extraerRUT(result)){
+            socket.emit('validarRut',{Rut:formatRut(extraerRUT(result)),code:CODE});
+            }else{
+            socket.emit('validarQR',{Data:result,code:CODE});
+            }
+        }
+
+    }
+    function quitarpausa(){
+        pausa=false;
+    }
+
+    </script>
+
+</body>
+
+</html>

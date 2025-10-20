@@ -1,0 +1,241 @@
+<style>
+    .hacker-container {
+        height: 60px;
+        overflow: hidden;
+    }
+
+    .hacker-container #code {
+        height: 100%;
+        width: 100%;
+        background: transparent;  
+    }
+
+    .hacker-container #code p {
+        font-family: monospace;
+        font-weight: bold;
+        font-size: 0.25em;
+        margin: 0;
+        padding: 0;
+        line-height: 1.2;
+        color: #a4a5a4;
+        white-space: nowrap;
+    }
+
+    
+ .user-avatarNav {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            border: 4px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .avatar-1 { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+        .avatar-2 { background: linear-gradient(135deg, #10b981, #2563eb); }
+        .avatar-3 { background: linear-gradient(135deg, #ec4899, #ef4444); }
+        .avatar-4 { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .avatar-5 { background: linear-gradient(135deg, #14b8a6, #16a34a); }
+        .avatar-6 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+        .avatar-current { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+
+</style>
+
+<!-- Topbar -->
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+    <!-- Sidebar Toggle (Topbar) -->
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+        <i class="fa fa-bars"></i>
+    </button>
+
+    
+    <h1 class="hacker-container">
+        <section id="code"></section>
+    </h1>
+
+    <!-- Topbar Navbar -->
+    <ul class="navbar-nav ml-auto">
+
+        <!-- Nav Item - Alerts -->
+
+        <!---
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-bell fa-fw"></i>
+                <!-- Counter - Alerts --><!---
+                <span class="badge badge-danger badge-counter">0+</span>
+            </a>
+            <!-- Dropdown - Alerts --><!---
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header">
+                    Centro de notificaciones
+                </h6>
+                <a class="dropdown-item d-flex align-items-center" href="/dashboard/usuarios/administracion">
+                    <div class="mr-3">
+                        <div class="icon-circle bg-primary">
+                            <i class="fas fa-file-alt text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="small text-gray-500">Alumnos pendiente de validación</div>
+                        <span class="font-weight-bold">3 alumnos pendiente de validación</span>
+                    </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="mr-3">
+                        <div class="icon-circle bg-success">
+                            <i class="fas fa-donate text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="small text-gray-500">December 7, 2025</div>
+                        Tienes eventos pendiente de realización
+                    </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="mr-3">
+                        <div class="icon-circle bg-warning">
+                            <i class="fas fa-exclamation-triangle text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="small text-gray-500">December 2, 2025</div>
+                        Proximo evento de tu sede.
+                    </div>
+                </a>
+                <!---<a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a> ---><!---
+            </div>
+        </li> --->
+
+        <div class="topbar-divider d-none d-sm-block"></div>
+
+        <!-- Nav Item - User Information -->
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-3 d-none d-lg-inline text-gray-600 small"><%- Usuario.Nombre%> <%- Usuario.Apellido_P%></span>
+                <div class="user-avatarNav avatar-<%= Usuario.icono %>" id="mainAvatarNav" data-id-usuario="<%= Usuario.ID %>">
+                                    <%= Usuario.Nombre.substring(0, 1) %><%= Usuario.Apellido_P.substring(0, 1) %>
+                                </div>
+
+            </a>
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="/dashboard/perfil">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Perfil
+                </a>
+                <a class="dropdown-item" href="/dashboard/perfil/credencial">
+                    <i class="fas fa-address-card
+                     fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Credencial
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="javascript:void(0);" onclick="logoutSwal()">
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Cerrar sesión
+                </a>
+            </div>
+        </li>
+
+    </ul>
+
+</nav><!-- Topbar -->
+<script>
+    function logoutSwal() {
+        Swal.fire({
+            title: '¿Cerrar sesión?',
+            text: 'Tu sesión actual se cerrará.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, cerrar sesión',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/logout';
+            }
+        });
+    }
+
+</script>
+
+
+
+<script>
+    let intervalID = window.setInterval(updateScreen, 400)
+    let c = document.querySelector('#code')
+
+    let txt = [
+    'FORCE: XX0022. ENCYPT://000.222.2345',
+    'TRYPASS: ********* AUTH CODE: ALPHA GAMMA: 1___ PRIORITY 1',
+    'RETRY: REINDEER FLOTILLA',
+    'Z:> /FALKEN/GAMES/TICTACTOE/ EXECUTE -PLAYERS 0',
+    '================================================',
+    'Priority 1 // local / scanning...',
+    'scanning ports...',
+    'BACKDOOR FOUND (23.45.23.12.00000000)',
+    'BACKDOOR FOUND (13.66.23.12.00110000)',
+    'BACKDOOR FOUND (13.66.23.12.00110044)',
+    '...locating vulnerabilities...',
+    '...vulnerabilities found...',
+    'INIT BRUTE.EXE -r -z',
+    'ACCESS GRANTED // NODE: SANTIAGO-CL',
+    '---TRACE LOG START---',
+    'Scanning subnet: 190.45.23.*',
+    'FOUND: proxy.duoc.cl @ PORT 443',
+    'WARNING: FIREWALL “CONDOR” ACTIVE',
+    'BYPASS: 010101... ACCEPTED',
+    'Loading module: UC_ACCESS.dll',
+    '>>> EasterEgg: "DUOC UC INTERNAL SYSTEM DETECTED"',
+    'Root@Chile> cat /mnt/andes/torres-del-paine.txt',
+    'File content: *** PENGUINS APPROVED ***',
+    '...',
+    'injecting payload → biblioteca_virtual',
+    'response: “Alumno pendiente de validación”',
+    'SCAN: __ 0100.0000.0554.0080',
+    'SCAN: __ 0020.0000.0553.0080',
+    'FLAG CAPTURED: DUOC{valpo-campus-root}',
+    '...',
+    'SNIFFER ACTIVE // traffic.uc.cl',
+    'SSH Brute Force → success',
+    '...file secured in /exports/chile/traditions/',
+    'BACKDOOR OPEN: 200.73.45.12',
+    '>>> EasterEgg: “BIENVENIDO A CHILE”',
+    '---TRACE LOG END---',
+    'DEPLOY: NODE >> San carlos de apoquindo',
+    'DEPLOY: NODE >> MAIPÚ',
+    'DEPLOY: NODE >> CONCEPCIÓN',
+    'ALERT! unauthorized access → campus_plaza_oeste',
+    'Message: “Hack the Planet…',
+    '================================================',
+    'SYSTEM HALT > reason: over buffer',
+    'Rebooting kernel...'
+    ]
+
+    let docfrag = document.createDocumentFragment()
+
+    function updateScreen() {
+        txt.push(txt.shift())
+        txt.forEach((e)=>{
+            let p =document.createElement('p')
+            p.textContent = e
+            docfrag.appendChild(p)        
+        })
+        while(c.firstChild) {
+            c.removeChild(c.firstChild)
+        }
+        c.appendChild(docfrag)
+    }
+</script>
+

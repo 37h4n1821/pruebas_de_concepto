@@ -1,0 +1,303 @@
+<div id="EditarModal" class="modal-backdrop hidden">
+    <div class="modal">
+        <!-- Header -->
+        <div class="modal-header">
+            <h2 class="modal-title">Editar Evento</h2>
+            <button onclick="closeModalEditar()" class="close-btn">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Form Content -->
+        <div class="modal-content">
+            <form id="editForm" class="form-container">
+                <!-- Información Básica -->
+                <div class="form-section">
+                    <h3 class="section-title">Información Básica</h3>
+                    <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Nombre de la Actividad</label>
+                            <input type="text" name="nombre_actividadEditar" required class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Rol de la organización</label>
+                            <select name="rol_organizadorEditar" id="rolOrganizacionSelectEditar" required class="form-select">
+                                <option value="" selected disabled>Seleccione una opción...</option>
+                                <option value="1">Organizadores</option>
+                                <option value="2">Participantes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Sede Organizadora</label>
+                            <input name="sede_organizadoraEditar" id="sedeSelectEditar" disabled  class="form-select">
+                                
+                         </input>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ubicación de la actividad</label>
+                            <input type="text" name="ubicacionEditar" required class="form-input">
+                        </div>
+
+                         
+                  
+                    </div>
+
+
+                    <div class="form-group" style="margin-top: 24px;">
+                        <label class="form-label">Descripción</label>
+                        <textarea name="descripcionEditar"  class="form-textarea"></textarea>
+                    </div>
+                </div>
+
+                <!-- Clasificación -->
+                <div class="form-section">
+                    <h3 class="section-title">Clasificación</h3>
+                    <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Origen de Actividad</label>
+                            <select name="origen_actividadEditar" required class="form-select">
+                                <option value=""  selected>Seleccionar...</option>
+
+                                <% datosOrigen.forEach(origen=> { %>
+                                    <option value="<%= origen.id%>">
+                                        <%= origen.Origen%>
+                                    </option>
+
+                                    <%});%>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Categoría</label>
+                            <select name="categoriaEditar" required class="form-select">
+                                <option value="" disabled selected>Seleccionar...</option>
+                                <option value="Charla">Charla</option>
+                                <option value="Taller">Taller</option>
+                                <option value="Reunión">Reunión</option>
+                                <option value="Evento">Evento</option>
+                            </select>
+                        </div>
+                       
+                    </div>
+
+                    <div class="form-grid form-grid-2">
+                        
+
+                        <div class="form-group">
+                            <label class="form-label">Intersede</label>
+                            <select name="intersedeEditar" required class="form-select">
+                                <option value="" disabled selected>Seleccionar...</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+
+                            </select>
+                        </div>
+                              <div class="form-group">
+                            <label class="form-label">Responsable</label>
+                            <input name="responsableEditar" id="responsableSelectEditar" disabled  class="form-select">
+                                
+           
+                        </div>
+                        
+                    </div>
+
+
+
+                    <div class="form-group" style="margin-top: 24px;">
+                        <label class="form-label">Carreras Participantes</label>
+                        <input class="form-input" disabled type="text" name="carreras_participantesEditar">
+                    </div>
+                </div>
+                <!-- Fechas y Capacidad -->
+                <div class="form-section">
+                    <h3 class="section-title">Fechas y Capacidad</h3>
+                    <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Fecha y Hora de Inicio</label>
+                            <input type="datetime-local" name="fecha_inicioEditar" required class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fecha y Hora de Término</label>
+                            <input type="datetime-local" name="fecha_terminoEditar" required class="form-input">
+                        </div>
+                    </div>
+
+
+                    <div class="form-grid form-grid" style="margin-top: 24px;">
+                        <div class="form-group">
+                            <label class="form-label">Tipo de Público</label>
+                            <select name="tipo_publicoEditar" id="tipoPublicoSelectEditar" required class="form-input">
+                                <option value="">Seleccionar...</option>
+                                <option value="1">Interno</option>
+                                <option value="2">Externo</option>
+                                <option value="3">Mixto</option>
+                            </select>
+                        </div>
+                       
+                    </div>
+
+                    <!-- Categorías de Público -->
+                    <div class="form-group" style="margin-top: 12px;">
+                        <div id="categoriasContainerEditar" class="carreras-container hidden">
+                            <div class="carreras-title">Selecciona las categorías de público que asistirán:</div>
+                            <div id="categoriasListEditar" class="carreras-list" style="max-height: 150px; overflow-y:auto;">
+                                <!-- Categorías se cargarán dinámicamente -->
+                            </div>
+                          <!--   <div class="carreras-count">
+                                <span id="categoriasSeleccionadasEditar">0 categorías seleccionadas</span>
+                            </div> -->
+                        </div>
+                        <div id="categoriasPlaceholderEditar" class="placeholder-field">
+                            Primero selecciona un tipo de público para ver las categorías disponibles
+                        </div>
+                    </div>
+
+                    
+                    <div class="form-grid form-grid-3" style="margin-top: 24px;">
+                        <div class="form-group">
+                            <label class="form-label">Público Interno Proyectado</label>
+                            <input type="number" name="publico_internoEditar" min="0"  class="form-input"
+                                id="publicoInternoEditar">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Público Externo Proyectado</label>
+                            <input type="number" name="publico_externoEditar" min="0"  class="form-input"
+                                id="publicoExternoEditar">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Capacidad Total Proyectada</label>
+                            <input type="number" name="capacidadEditar" readonly class="form-input" id="capacidadTotalEditar">
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <!-- Información VCM -->
+                <div class="form-section">
+                    <h3 class="section-title">Información VCM</h3>
+                    <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Tipo de Actividad VCM</label>
+                            <select  name="tipo_actividad_vcmEditar" class="form-select">
+                                <option value="" disabled selected>Seleccionar...</option>
+                                <% datosVCMTipoActividad.forEach(vcmTipoAct=> { %>
+                                    <option value="<%= vcmTipoAct.id%>">
+                                        <%= vcmTipoAct.Tipo%>
+                                    </option>
+
+                                    <%});%>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Entidad Relacionada VCM</label>
+                            <select  name="entidad_relacionada_vcmEditar" class="form-select">
+                                <option value="" disabled selected>Seleccionar...</option>
+                                <% datosVCMEntidad.forEach(vcmEntidad=> { %>
+                                    <option value="<%= vcmEntidad.id%>">
+                                        <%= vcmEntidad.Entidad%>
+                                    </option>
+
+                                    <%});%>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Principios Política Aborda VCM</label>
+                            <select  name="principios_politica_vcmEditar" class="form-select">
+                                <option value="" disabled selected>Seleccionar...</option>
+                                <% datosVCMPrincipio.forEach(vcmPrincipio=> { %>
+                                    <option value="<%= vcmPrincipio.id%>">
+                                        <%= vcmPrincipio.Principio%>
+                                    </option>
+
+                                    <%});%>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Objetivo VCM</label>
+                            <select  name="objetivo_vcmEditar" class="form-select">
+                                <option value="" disabled selected>Seleccionar...</option>
+                                <% datosVCMObjetivo.forEach(vcmObjetivo=> { %>
+                                    <option value="<%= vcmObjetivo.id%>">
+                                        <%= vcmObjetivo.Objetivo%>
+                                    </option>
+
+                                    <%});%>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ámbito Acción Actividad VCM</label>
+                            <select  name="ambito_accion_vcmEditar" class="form-select">
+                                <option value="" disabled selected>Seleccionar...</option>
+                                <% datosVCMAmbito.forEach(vcmAmbito=> { %>
+                                    <option value="<%= vcmAmbito.id%>">
+                                        <%= vcmAmbito.Ambito%>
+                                    </option>
+
+                                    <%});%>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información Adicional -->
+                <div class="form-section">
+                    <h3 class="section-title">Información Adicional</h3>
+                    <div class="form-grid form-grid-2">
+                      <div class="form-group">
+                            <label class="form-label">Gasto Proyectado (CLP)</label>
+                            <input required type="text" id="gastoProyectadoEditar" name="gasto_proyectadoEditar"
+                                class="form-input" inputmode="numeric" pattern="[0-9,.]*">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Estatus</label>
+                            <select required name="estatusEditar" class="form-select">
+                                <option value="" disabled selected>Seleccionar...</option>
+                                <% datosEstatus.forEach(estatus=> { %>
+                                    <option value="<%= estatus.id%>">
+                                        <%= estatus.Estatus%>
+                                    </option>
+
+                                    <%});%>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">¿Aplicará Encuesta?</label>
+                            <select required name="aplico_encuestaEditar" class="form-select">
+                                <option value="">Seleccionar...</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Link de Encuesta</label>
+                            <input type="text" name="link_encuestaEditar" class="form-input">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Link de Evidencia</label>
+                            <input type="text" name="link_evidenciaEditar" class="form-input">
+                        </div>
+                        <input type="text" hidden name="idEventoEditar" class="form-input">
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+            <button type="button" onclick="closeModalEditar()" class="btn-secondary">
+                Cancelar
+            </button>
+            <button type="submit" form="editForm" class="btn-submit">
+                Editar Evento
+            </button>
+        </div>
+    </div>
+</div>

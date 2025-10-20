@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="es-cl">
+
+<head>
+
+    <%- include('../../modulos/head.ejs'); %>
+        <meta name="description" content="Cibervoluntarios de DUOC UC">
+        <meta name="author" content="Tecbit">
+        <title>Cibervoluntarios</title>
+
+        <link href="/css/modal.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <%- include('../../modulos/slidebar.ejs'); %>
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <!-- Main Content -->
+                <div id="content">
+                    <%- include('../../modulos/navbar.ejs'); %>
+                        <!-- Begin Page Content -->
+                        <div class="container-fluid">
+
+                            <!-- Page Heading -->
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <h1 class="h3 mb-0 text-gray-800"> Administración de eventos</h1>
+                                <!----<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <i class="fas fa-download fa-sm text-white-50"></i> Descargar reporte</a>-->
+                            </div>
+
+                           <!-- Content Row -->
+                            <div class="row">
+
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        <% if (rolUsuario !== 1) { %>
+                                        Sede
+                                        <% } else { %>
+                                        Seleccione su Sede
+                                        <% } %>
+                                    </div>
+
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        <select class="custom-select" id="sedeSelector" <% if (rolUsuario !== 1) { %> disabled <% } %>>
+                                        <% if (rolUsuario === 1) { %>
+                                            <option value="44" <%= (sedeFiltrada === 44 ? 'selected' : '') %>>Todas las sedes</option>
+                                        <% } %>
+                                        <% datosSedes.forEach(function(sedes) { %>
+                                            <option value="<%= sedes.cod_sede %>" <%= (sedes.cod_sede === sedeFiltrada ? 'selected' : '') %>>
+                                            <%= sedes.sede %>
+                                            </option>
+                                        <% }); %>
+                                        </select>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-12 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                     
+                                <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                <div class="filters-title">
+                                                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"></path>
+                                                    </svg>
+                                                    Filtros de Búsqueda
+                                                </div>
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                <div class="form-grid form-grid-3" style="margin-top: 24px;">
+                                                <div class="form-group">
+                                                    <label class="form-label">Año</label>
+                                                    <select name="anioFiltro" id="filtradoAnio" required class="form-select">
+                                                        <option value="" selected disabled>Seleccione una opción...</option>
+                                                        <% datosAnios.forEach(option=> { %>
+                                                            <option value="<%= option.Anio%>">
+                                                                <%= option.Anio%>
+                                                            </option>
+                                                            <% }); %>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">Semestre</label>
+                                                    <select name="semestreFiltro" id="filtradoSemestre" required class="form-select">
+                                                        <option value="" selected disabled>Seleccione una opción...</option>
+                                                        
+                                                    </select>
+                                                </div>
+                                                 <div class="form-group">
+                                                    <label class="form-label">Estado</label>
+                                                    <select name="estadoFiltro" id="filtradoEstado" required class="form-select">
+                                                        <option value="" selected disabled>Seleccione una opción...</option>
+                                                        <% datosEstatus.forEach(estado=> { %>
+                                                            <option value="<%= estado.id%>">
+                                                                <%= estado.Estatus%>
+                                                            </option>
+                                                            <% }); %>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">Categoría</label>
+                                                    <select name="categoriaFiltro" id="filtradoCategoria" required class="form-select">
+                                                        <option value="" disabled selected>Seleccione una opción...</option>
+                                                        <option value="Charla">Charla</option>
+                                                        <option value="Taller">Taller</option>
+                                                        <option value="Reunión">Reunión</option>
+                                                        <option value="Evento">Evento</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">Tipo de Público</label>
+                                                    <select name="tipoPublicoFiltro" id="filtradoTipoPublico" required class="form-select">
+                                                        <option value="" selected disabled>Seleccione una opción...</option>
+                                                        <% datosPublico.forEach(publico=> { %>
+                                                            <option value="<%= publico.ID%>">
+                                                                <%= publico.Tipo%>
+                                                            </option>
+                                                            <% }); %>
+                                                    </select>
+                                                </div>
+                                               
+                                               <!--  <div class="form-group">
+                                                    <label class="form-label">Carrera</label>
+                                                    <select name="carreraFiltro" id="filtradoCarrera" required class="form-select">
+                                                        <option value="" selected disabled>Seleccione una opción...</option>
+                                                        <% datosCarreras.forEach(carrera=> { %>
+                                                            <option value="<%= carrera.id%>">
+                                                                <%= carrera.nombre%>
+                                                            </option>
+                                                            <% }); %>
+                                                    </select>
+                                                </div> -->
+                                            </div>
+                                            <div class="search-wrapper">
+                                                <input type="text" id="busquedaGeneral" class="search-input" placeholder="Buscar por nombre, responsable, ubicación...">
+                                                <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <circle cx="11" cy="11" r="8"></circle>
+                                                    <path d="m21 21-4.35-4.35"></path>
+                                                </svg>
+                                            </div>
+                                            
+
+                                            </div>
+                                            <div class="filters-actions">
+                                                <button class="btn btn-secondary" id="btn-limpiar-filtros">Limpiar Filtros</button><!--                                             <button class="btn btn-secondary"  onclick="">Exportar Excel</button>-->                                                
+                                                <button class="btn btn-secondary" id="btnExportarExcel">Exportar Excel</button>
+                                            </div>
+                                            <span id="contador-filtrados" class="text-muted"></span>
+                                        </div>
+                                        </div>
+                                    
+                                </div>
+                                </div>
+                            </div>
+
+                            </div>
+                            <div class="row">
+
+                                
+                                <div class="col-12 mb-4">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div
+                                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Eventos programados</h6>
+                                            <div class="dropdown no-arrow">
+                                                <a class="dropdown-toggle btn" style="background: linear-gradient(90deg, #4f7cdf 0%, #1d4ed8 100%); color: #ffffff;" href="#" role="button" id="dropdownMenuLink"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="openModal('CrearModal')">
+                                                    <i class="fas fa-plus fa-sm fa-fw mr-2" style="color: #ffffff;" title="Agregar evento"></i>Crear evento 
+                                                </a>
+                                               
+                                            </div>
+
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Estado</th>
+                                                            <th>Nombre</th>
+                                                            <th>Responsable</th>
+                                                             <th>Fecha</th>
+                                                            <th>Hora Inicio</th>
+                                                            <th>Ubicación</th>
+                                                            <th>Capacidad</th>
+                                                            <th>Inscritos</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tabla-eventos-body">
+                                                            <% datos.forEach(evento => { const categoria      = (evento.Categoria || evento.Tipo || '').toString().trim(); const tipoPublicoId  = String(evento.TipoPublicoID || evento.ID_Tipo_Publico || evento.TipoPublico || '');let carrerasIds = ''; const rawCarr = evento.ID_Carreras_Participantes;if (Array.isArray(rawCarr)) { carrerasIds = rawCarr.join(','); } else if (typeof rawCarr === 'string') {try {const arr = JSON.parse(rawCarr);           carrerasIds = Array.isArray(arr) ? arr.join(',') : String(rawCarr);} catch (e) {carrerasIds = String(rawCarr).replace(/[\[\]\s"]/g,''); }} else if (rawCarr != null) {carrerasIds = String(rawCarr); }const anio           = String(evento.Anio || '');       const semestre       = String(evento.Semestre || '');     const sedeId   = String(evento.Id_Sede || ''); const estadoId = String(evento.Id_Estatus || '');  %>
+                                                            
+                                                            <tr class="fila-evento"
+                                                                data-id="<%= evento.Id %>"
+                                                                data-estado="<%= estadoId %>"
+                                                                data-sede="<%= sedeId %>"
+                                                                data-anio="<%= anio %>"
+                                                                data-semestre="<%= semestre %>"
+                                                                data-categoria="<%= categoria %>"
+                                                                data-tipopublico="<%= tipoPublicoId %>"
+                                                                data-carrera="<%= carrerasIds %>"
+                                                                data-nombre="<%- (evento.Nombre || '').toString() %>"
+                                                                data-responsable="<%- (evento.Nombre_Responsable || '').toString() %>"
+                                                                data-ubicacion="<%- (evento.Ubicacion || '').toString() %>">
+                                                                
+                                                                
+
+                                                            <td class="chip-estado <%= evento.CodeJS_Estatus %>"  onclick="mostrarDetalle('<%= evento.Estatus %>')" data-bs-toggle="tooltip">
+                                                            <%= evento.Estatus %>
+                                                        </td>
+                                                            <td onclick="mostrarDetalle('<%= evento.Nombre %>')" data-bs-toggle="tooltip" title="<%= evento.Nombre %>">
+                                                                <%= evento.Nombre %>
+                                                            </td>
+
+                                                            
+                                                            <td onclick="mostrarDetalle('<%= evento.Nombre_Responsable %>')" data-bs-toggle="tooltip" title="<%= evento.Nombre_Responsable %>">
+                                                                <%= evento.Nombre_Responsable %>
+                                                            </td>
+                                                            
+                                                            <td style="text-align: center;"><%= evento.Fecha_Inicio.toISOString().slice(0, 10) %></td>
+                                                            <td style="text-align: center;"><%= evento.Hora_Inicio.slice(0,5) %></td>
+
+                                                            <td onclick="mostrarDetalle('<%= evento.Ubicacion %>')" data-bs-toggle="tooltip" title="<%= evento.Ubicacion %>">
+                                                                <%= evento.Ubicacion %>
+                                                            </td>
+
+                                                   
+
+                                                            <td style="text-align: center;"><%= evento.Capacidad %></td>
+                                                            <td style="text-align: center;"><%= evento.Inscritos %></td>
+
+                                                            
+
+                                                                <td class="text-center">
+                                                                <!-- Vista Desktop -->
+                                                                <div class="acciones-desktop">
+                                                                <!-- Botón Código -->
+                                                                <button data-bs-toggle="tooltip" type="button" class="btn btn-code mx-1"
+                                                                        onclick="copiarCodigo('<%= evento.Code %>')" title="Copiar código">
+                                                                    <%= evento.Code %>
+                                                                </button>
+                                                                <!-- Botón Editar -->
+                                                                <% if ([2, 1].includes(Usuario.rol)) { %>
+                                                                    <button data-bs-toggle="tooltip" type="button" class="btn btn-edit btn-circle mx-1"
+                                                                    data-bs-target="#EditarModal" data-id="<%= evento.Id %>" title="Editar evento" onclick="openModalEditar(<%= evento.Id %>)">
+                                                                <i class="fas fa-edit"></i>
+                                                                </button>
+                                                                <% } %>
+                                                               
+                                                                <!-- Botón Copiar -->
+                                                                <button data-bs-toggle="tooltip" type="button" class="btn btn-copy btn-circle mx-1"
+                                                                        onclick="copiarEvento('<%= evento.Code %>')" title="Copiar enlace">
+                                                                    <i class="fas fa-copy"></i>
+                                                                </button>
+                                                                <!-- Botón Personas Inscritas -->
+                                                                <button data-bs-toggle="tooltip" type="button" class="btn btn-inscribed btn-circle mx-1"
+                                                                        data-id="<%= evento.Id %>" data-name="<%= evento.Nombre %>"
+                                                                        data-inscritos="<%= evento.Inscritos %>" title="Ver inscritos"
+                                                                        onclick="exportInscritos(this)">
+                                                                    <i class="fas fa-users"></i>
+                                                                </button>
+                                                                <!-- Botón Asistentes -->
+                                                                <button data-bs-toggle="tooltip" type="button" class="btn btn-attended btn-circle mx-1"
+                                                                        data-id="<%= evento.Id %>" data-name="<%= evento.Nombre %>"
+                                                                        data-asistentes="<%= evento.Asistentes %>" title="Ver asistentes"
+                                                                        onclick="exportAsistentes(this)">
+                                                                    <i class="fas fa-user-check"></i>
+                                                                </button>
+                                                                <!-- Botón QR -->
+                                                                <button data-bs-toggle="tooltip" type="button" class="btn btn-qr btn-circle mx-1"
+                                                                        onclick="mostrarQR('<%= evento.Code %>')" title="Mostrar código QR">
+                                                                    <i class="fas fa-qrcode"></i>
+                                                                </button>
+                                                                <!-- Botón Eliminar -->
+                                                                                                                                 <% if ([2, 1].includes(Usuario.rol)) { %>
+
+                                                                <button data-bs-toggle="tooltip" type="button" class="btn btn-danger btn-circle mx-1 btn-eliminar-evento"
+                                                                        data-id="<%= evento.Id %>" title="Eliminar evento">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+                                                                                                                                <% } %>
+
+                                                                </div>
+
+                                                            <!-- Vista Móvil -->
+                                                                <div class="acciones-movil">
+                                                                <button class="btn btn-primary w-100"
+                                                                        onclick="mostrarAcciones('<%= evento.Id %>', '<%= evento.Nombre %>', '<%= evento.Code %>', '<%= evento.Inscritos %>', '<%= evento.Asistentes %>')">
+                                                                    Ver acciones
+                                                                </button>
+                                                                </div>
+                                                            </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                            <tr id="sin-resultados" style="display:none;">
+                                                            <td colspan="8" class="text-center text-muted">No hay eventos que coincidan con los filtros.</td>
+                                                            </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+ 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.container-fluid -->
+
+                </div>
+                <!-- End of Main Content -->
+
+                <%- include('../../modulos/footer.ejs'); %>
+
+            </div>
+            <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <%- include('modulos/modal_crear_evento.ejs'); %>
+        <%- include('modulos/modal_editar_evento.ejs'); %>
+        
+
+
+            <%- include('../../modulos/scripts_globales.ejs'); %>
+
+
+
+<script>
+    (function(){
+    const SEDE_USUARIO = <%= Number(sedeFiltrada) %>;
+
+    const $anio       = document.getElementById('filtradoAnio');
+    const $semestre   = document.getElementById('filtradoSemestre');
+    const $categoria  = document.getElementById('filtradoCategoria');
+    const $publico    = document.getElementById('filtradoTipoPublico');
+    const $carrera    = document.getElementById('filtradoCarrera');
+    const $busqueda   = document.getElementById('busquedaGeneral');
+    const $estado     = document.getElementById('filtradoEstado');   
+    const $sede       = document.getElementById('sedeSelector');
+
+    const $tbody    = document.getElementById('tabla-eventos-body');
+    const $filas    = Array.from($tbody.querySelectorAll('.fila-evento'));
+    const $noRows   = document.getElementById('sin-resultados');
+    const $limpiar  = document.getElementById('btn-limpiar-filtros');
+    const $contador = document.getElementById('contador-filtrados');
+
+    function normalizar(str){
+        return (str || '')
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '');
+    }
+
+    function parseCarreras(val) {
+        if (!val && val !== 0) return [];
+        try { const maybe = JSON.parse(val); if (Array.isArray(maybe)) return maybe.map(String); } catch(_) {}
+        return String(val).replace(/[\[\]\s"]/g,'').split(',').filter(Boolean).map(String);
+    }
+
+    function coincideCarrera(dataCarrera, filtro) {
+        if (!filtro) return true;
+        const ids = parseCarreras(dataCarrera);
+        return ids.includes(String(filtro));
+    }
+
+    let idsFiltrados = [];
+    function aplicarFiltros(){
+        idsFiltrados = [];
+        const f = {
+        sede:      $sede?.value || null,  
+        anio:      $anio?.value || null,
+        semestre:  $semestre?.value || null,
+        categoria: normalizar($categoria?.value || ''),
+        publico:   $publico?.value || null,
+        carrera:   $carrera?.value || null,
+        estado:    $estado?.value || null,
+        q:         normalizar($busqueda?.value || '')
+        };
+
+        let visibles = 0;
+
+        $filas.forEach(tr => {
+        // --- Sede ---
+        // Si admin y selecciona "44" => todas. Si no es admin, igualmente su data ya viene filtrada desde backend.
+        const okSede = !f.sede || f.sede === '44' ? true : (tr.dataset.sede === f.sede);
+
+        const okAnio      = !f.anio      || tr.dataset.anio === f.anio;
+        const okSemestre  = !f.semestre  || tr.dataset.semestre === f.semestre;
+        const okCategoria = !f.categoria || normalizar(tr.dataset.categoria) === f.categoria;
+        const okPublico   = !f.publico   || tr.dataset.tipopublico === f.publico;
+        const okCarrera   = !f.carrera   || coincideCarrera(tr.dataset.carrera, f.carrera);
+        const okEstado    = !f.estado    || tr.dataset.estado === f.estado; // 👈 nuevo
+
+        // Búsqueda
+        const textoBuscado     = f.q;
+        const campoNombre      = normalizar(tr.dataset.nombre);
+        const campoResponsable = normalizar(tr.dataset.responsable);
+        const campoUbicacion   = normalizar(tr.dataset.ubicacion);
+        const okBusqueda = !textoBuscado ||
+                            campoNombre.includes(textoBuscado) ||
+                            campoResponsable.includes(textoBuscado) ||
+                            campoUbicacion.includes(textoBuscado);
+
+        const mostrar = okSede && okAnio && okSemestre && okCategoria && okPublico && okCarrera && okEstado  && okBusqueda;
+        tr.style.display = mostrar ? '' : 'none';
+        if (mostrar) {
+            visibles++;
+            idsFiltrados.push(tr.dataset.id); 
+            }
+        });
+
+        $noRows.style.display = visibles ? 'none' : '';
+        if ($contador) $contador.textContent = visibles ? `Mostrando ${visibles} evento(s)` : 'Sin resultados';
+    }
+
+    function exportarExcelFiltrados() {
+        if (!idsFiltrados.length) {
+            alert("No hay eventos para exportar");
+            return;
+        }
+
+        // Opción 1: enviar los IDs por query string
+        const idsParam = idsFiltrados.join(',');
+        window.location.href = `/dashboard/eventos/export-excel-filtrados?ids=${idsParam}`;
+        }
+
+         document.getElementById('btnExportarExcel')
+            ?.addEventListener('click', exportarExcelFiltrados);
+
+    // Repoblar semestre considerando la sede actual (para listar solo los semestres que existan en esa sede)
+    function repoblarSemestres() {
+        if (!$semestre) return;
+        const anioSel = $anio?.value || null;
+        const sedeSel = $sede?.value || null;
+
+        const set = new Set();
+        $filas.forEach(tr => {
+        const coincideSede = !sedeSel || sedeSel === '44' ? true : (tr.dataset.sede === sedeSel);
+        if (!coincideSede) return;
+        if (!anioSel || tr.dataset.anio === anioSel) {
+            set.add(tr.dataset.semestre);
+        }
+        });
+
+        const lista = Array.from(set).map(Number).filter(n => n === 1 || n === 2);
+        const opciones = lista.length ? lista.sort((a,b)=>a-b) : [1,2];
+
+        const prev = $semestre.value;
+        $semestre.innerHTML = `<option value="" selected disabled>Seleccione una opción...</option>`;
+        opciones.forEach(n => {
+        const opt = document.createElement('option');
+        opt.value = String(n);
+        opt.textContent = String(n);
+        $semestre.appendChild(opt);
+        });
+        if (prev && opciones.map(String).includes(prev)) $semestre.value = prev; else $semestre.value = '';
+    }
+
+    // Debounce para búsqueda
+    function debounce(fn, wait = 200){
+        let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
+    }
+
+    // Listeners
+    $sede     && $sede.addEventListener('change', () => { repoblarSemestres(); aplicarFiltros(); });
+    $anio     && $anio.addEventListener('change', () => { repoblarSemestres(); aplicarFiltros(); });
+    $semestre && $semestre.addEventListener('change', aplicarFiltros);
+    $categoria&& $categoria.addEventListener('change', aplicarFiltros);
+    $publico  && $publico.addEventListener('change', aplicarFiltros);
+    $carrera  && $carrera.addEventListener('change', aplicarFiltros);
+    $estado   && $estado.addEventListener('change', aplicarFiltros); // 👈 nuevo
+
+    $busqueda && $busqueda.addEventListener('input', debounce(aplicarFiltros, 200));
+
+    // Limpiar (si usas el botón)
+    $limpiar && $limpiar.addEventListener('click', () => {
+        if ($sede && SEDE_USUARIO === 1) $sede.value = '1'; // admin vuelve a "todas"
+        if ($anio)      $anio.value = '';
+        if ($semestre)  $semestre.value = '';
+        if ($categoria) $categoria.value = '';
+        if ($publico)   $publico.value = '';
+        if ($carrera)   $carrera.value = '';
+        if ($estado)    $estado.value = '';
+
+        if ($busqueda)  $busqueda.value = '';
+        repoblarSemestres();
+        aplicarFiltros();
+    });
+
+    // Inicial
+    repoblarSemestres();
+    aplicarFiltros();
+    })();
+</script>
+
+
+
+                
+<script>
+
+    function mostrarQR(code) {
+  const qrHTML = `
+    <div class="qr-section">
+      <div class="qr-code" id="qr-code-${code}"></div>
+      <p class="mb-0 text-muted small">
+        <i class="fas fa-qrcode me-1"></i>
+        Escanea para registrarte
+      </p>
+    </div>
+  `;
+
+  Swal.fire({
+    title: '',
+    html: qrHTML,
+    showConfirmButton: false,
+    width: 400,
+    customClass: {
+      popup: 'swal-qr'
+    },
+    didOpen: () => {
+      new QRCode(document.getElementById(`qr-code-${code}`), {
+        text: `https://cibervoluntarios.cittpass.cl/inscripcion/${code}`,
+        width: 150,
+        height: 150
+      });
+    }
+  });
+}
+
+
+    /* /////////////////////////////////////////////////////  CONTROL MODALES APERTURA CIERRE //////////////////////////////////////////////////////////////// */
+    function openModal(modal) {
+        document.getElementById(modal).classList.remove('hidden')
+        document.body.style.overflow = 'hidden'
+    }
+
+   
+    
+    function closeModal() {
+        document.getElementById('CrearModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    function closeModalEditar() {
+        document.getElementById('EditarModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            closeModalEditar();
+        }
+    });
+
+    // Cerrar modal al hacer clic fuera
+    document.getElementById('CrearModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+    document.getElementById('EditarModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closeModalEditar();
+        }
+    });
+
+
+    /* ///////////////////////////////////////////////////// FUNCIONALIDADES BOTONES ////////////////////////////////////////////////////////////////////*/
+
+    function copiarCodigo(codigo) {
+
+        codigo="https://cibervoluntarios.cittpass.cl/lector_qr/"+codigo;
+        // Usa la API moderna del portapapeles
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(codigo).then(() => {
+               Swal.fire('Copiado!', `Código "${codigo}" copiado al portapapeles.`, 'success')
+
+                return false;
+            }).catch(err => {
+                Swal.fire('Error', `Si el error persiste contacte con el soporte`, 'error')
+                return false;
+            });
+        } else {
+            // Fallback para navegadores antiguos
+            const input = document.createElement('input');
+            input.value = codigo;
+            document.body.appendChild(input);
+            input.select();
+            try {
+                document.execCommand('copy');
+                alert(`Código "${codigo}" copiado al portapapeles.`);
+            } catch (err) {
+                alert('Error al copiar el código.');
+            }
+            document.body.removeChild(input);
+        }
+    }
+    function copiarEvento(codigo) {
+
+        codigo="https://cibervoluntarios.cittpass.cl/inscripcion/"+codigo;
+        // Usa la API moderna del portapapeles
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(codigo).then(() => {
+                Swal.fire('Copiado!', `Enlace "${codigo}" copiado al portapapeles.`, 'success')
+                return false;
+            }).catch(err => {
+                Swal.fire('Error', `Si el error persiste contacte con el soporte`, 'error')
+                return false;
+            });
+        } else {
+            // Fallback para navegadores antiguos
+            const input = document.createElement('input');
+            input.value = codigo;
+            document.body.appendChild(input);
+            input.select();
+            try {
+                document.execCommand('copy');
+                alert(`Código "${codigo}" copiado al portapapeles.`);
+            } catch (err) {
+                alert('Error al copiar el código.');
+            }
+            document.body.removeChild(input);
+        }
+    }
+
+    document.addEventListener('click', async (e) => {
+  if (e.target.closest('.btn-eliminar-evento')) {
+    const btn = e.target.closest('.btn-eliminar-evento');
+    const eventoId = btn.getAttribute('data-id');
+    console.log("Click detectado en eliminar:", eventoId);
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¡Esta acción eliminará el evento!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(`/dashboard/eventos/api/eventos/${eventoId}`, {
+            method: 'DELETE'
+          });
+
+          if (res.ok) {
+            Swal.fire('¡Eliminado!', 'El evento ha sido eliminado.', 'success')
+              .then(() => window.location.reload());
+          } else {
+            const data = await res.json();
+            Swal.fire('Error', data.error || 'Error desconocido', 'error');
+          }
+        } catch (error) {
+          console.error('Error eliminando evento:', error);
+          Swal.fire('Error', 'Error al eliminar el evento', 'error');
+        }
+      }
+    });
+  }
+});
+
+
+    function exportAsistentes(btn) {
+        const eventoId = btn.getAttribute('data-id');
+        const eventoNombre = btn.getAttribute('data-name');
+        const asistentes = btn.getAttribute('data-asistentes');
+        if (asistentes == 0){
+                Swal.fire({
+                icon: 'info',
+                title: 'Sin Asistentes',
+                text: 'No hay asistentes registrados para este evento.',
+                confirmButtonText: 'OK'
+            });
+        } else {
+                const nombreCodificado = encodeURIComponent(eventoNombre);
+            // Abrir el Excel en una nueva pestaña pasando el nombre por query
+            window.open(`/dashboard/eventos/export-excel-asistentes/${eventoId}?nombre=${nombreCodificado}`, '_blank');
+        }
+    }
+
+    function exportInscritos(btn) {
+        const eventoId = btn.getAttribute('data-id');
+        const eventoNombre = btn.getAttribute('data-name');
+        const inscritos = btn.getAttribute('data-inscritos');
+
+        if (inscritos == 0){
+                Swal.fire({
+                icon: 'info',
+                title: 'Sin Inscritos',
+                text: 'No hay inscritos registrados para este evento.',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            // Codificar el nombre para URL
+            const nombreCodificado = encodeURIComponent(eventoNombre);
+            // Abrir el Excel en una nueva pestaña pasando el nombre por query
+            window.open(`/dashboard/eventos/export-excel-inscritos/${eventoId}?nombre=${nombreCodificado}`, '_blank');
+            }
+    }
+
+    function mostrarDetalle(texto) {
+            Swal.fire({
+                title: 'Detalle',
+                text: texto,
+                icon: 'info',
+                confirmButtonText: 'Cerrar',
+                confirmButtonColor: '#3085d6'
+            });
+        }
+
+    function mostrarAcciones(id, nombre, code, inscritos, asistentes) {
+    Swal.fire({
+        title: 'Acciones para ' + nombre,
+        html: `
+        <div class="acciones-swal">
+            <button class="btn btn-code w-100 my-1" onclick="copiarCodigo('${code}')">
+            <i class="fas fa-code"></i> Copiar código (${code})
+            </button>
+            <% if ([2, 1].includes(Usuario.rol)) { %>
+            <button class="btn btn-edit w-100 my-1" onclick="openModalEditar(${id}); Swal.close();">
+            <i class="fas fa-edit"></i> Editar evento
+            </button>
+             <% } %>
+            <button class="btn btn-copy w-100 my-1" onclick="copiarEvento('${code}')">
+            <i class="fas fa-copy"></i> Copiar enlace
+            </button>
+            <button class="btn btn-inscribed w-100 my-1"
+            data-id="${id}" 
+            data-name="${nombre}" 
+            data-inscritos="${inscritos}"
+            onclick="exportInscritos(this)">
+            <i class="fas fa-users"></i> Ver inscritos (${inscritos})
+            </button>
+            <button class="btn btn-attended w-100 my-1"
+            data-id="${id}" 
+            data-name="${nombre}" 
+            data-asistentes="${asistentes}"
+            onclick="exportAsistentes(this)">
+            <i class="fas fa-user-check"></i> Ver asistentes (${asistentes})
+            </button>
+            <button class="btn btn-qr w-100 my-1" onclick="mostrarQR('${code}')">
+            <i class="fas fa-qrcode"></i> Mostrar QR
+            </button>
+                        <% if ([2, 1].includes(Usuario.rol)) { %>
+
+        <button 
+    class="btn btn-danger w-100 my-1 btn-eliminar-evento" 
+    title="Eliminar evento" 
+    data-id="${id}">
+    <i class="fas fa-trash"></i> Eliminar evento
+    </button>                                                                <% } %>
+
+        </div>
+        `,
+        showConfirmButton: false,
+        showCloseButton: true,
+        width: '95%',
+        customClass: {
+        popup: 'acciones-popup'
+        }
+    });
+    }
+
+    function toggleAcciones() {
+    const desktopBlocks = document.querySelectorAll('.acciones-desktop');
+    const mobileBlocks = document.querySelectorAll('.acciones-movil');
+    const isMobile = window.innerWidth < 1530; // 
+
+    desktopBlocks.forEach(el => el.style.display = isMobile ? 'none' : 'block');
+    mobileBlocks.forEach(el => el.style.display = isMobile ? 'block' : 'none');
+    }
+
+    // Ejecutar al cargar y al redimensionar
+    window.addEventListener('load', toggleAcciones);
+    window.addEventListener('resize', toggleAcciones);
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+        });
+     /* ///////////////////////////////////////////////////// MODAL CREAR EVENTO ////////////////////////////////////////////////////////////////////*/
+
+
+    // ---------- CAMPOS : Gasto, formato y validación----------
+
+    const gastoInput = document.getElementById('gastoProyectado');
+    const formatter = new Intl.NumberFormat('es-CL'); // Formato Chile
+
+    gastoInput.addEventListener('input', (e) => {
+        // Quitar todo lo que no sea dígito
+        let value = e.target.value.replace(/\D/g, '');
+        if (value) {
+            // Formatear con separador de miles
+            e.target.value = formatter.format(value);
+        } else {
+            e.target.value = '';
+        }
+    });
+
+
+    // ---------- CAMPOS : Publico interno y externo, suma para capacidad ----------
+    function updateCapacity() {
+        const publicoInterno = parseInt(document.querySelector('input[name="publico_interno"]').value) || 0;
+        const publicoExterno = parseInt(document.querySelector('input[name="publico_externo"]').value) || 0;
+        document.querySelector('input[name="capacidad"]').value = publicoInterno + publicoExterno;
+    }
+
+    document.querySelector('input[name="publico_interno"]').addEventListener('input', updateCapacity);
+    document.querySelector('input[name="publico_externo"]').addEventListener('input', updateCapacity);
+
+
+    // ---------- CAMPOS : Carreras y Responsable según SEDE, según lo seleccionado cargan opciones ----------
+
+    let carrerasActuales = []; 
+    let carrerasSeleccionadas = new Set(); 
+    let listaSeleccionadas = []
+
+    function updateCarrerasCount() {
+        const checkboxes = document.querySelectorAll('input[name="carreras_participantes"]:checked');
+        const count = checkboxes.length;
+        document.getElementById('carrerasSeleccionadas').textContent = `${count} carrera${count !== 1 ? 's' : ''} seleccionada${count !== 1 ? 's' : ''}: ${listaSeleccionadas.join(', ')}`;
+    }
+
+    // Renderizar carreras
+    function renderCarreras(carreras) {
+        const carrerasList = document.getElementById('carrerasList');
+        carrerasList.innerHTML = '';
+
+        carreras.forEach(carrera => {
+            const checkboxDiv = document.createElement('div');
+            checkboxDiv.className = 'flex items-center';
+            checkboxDiv.innerHTML = `
+                <input type="checkbox" id="carrera_${carrera.id}" 
+                    name="carreras_participantes" 
+                    value="${carrera.id}" 
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    ${carrerasSeleccionadas.has(carrera.id) ? 'checked' : ''}>
+                <label for="carrera_${carrera.id}" class="ml-2 text-sm text-gray-700 cursor-pointer">${carrera.nombre}</label>
+            `;
+            carrerasList.appendChild(checkboxDiv);
+
+            // Listener para actualizar el set de seleccionadas
+            const checkbox = checkboxDiv.querySelector('input');
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    carrerasSeleccionadas.add(carrera.id);
+                    listaSeleccionadas.push(carrera.nombre)
+                    console.log(listaSeleccionadas)
+                } else {
+                    carrerasSeleccionadas.delete(carrera.id);
+                    listaSeleccionadas = listaSeleccionadas.filter(nombre => nombre !== carrera.nombre);
+                    console.log(listaSeleccionadas)
+
+                }
+                updateCarrerasCount();
+            });
+        });
+
+    }
+
+    // Filtrar carreras
+    function filtrarCarreras(termino) {
+        const terminoLower = termino.toLowerCase();
+        const carrerasFiltradas = carrerasActuales.filter(carrera => 
+            carrera.nombre.toLowerCase().includes(terminoLower)
+        );
+        renderCarreras(carrerasFiltradas);
+    }
+
+    // Event listener del buscador
+    document.getElementById('carrerasBuscador').addEventListener('input', function() {
+        filtrarCarreras(this.value);
+    });
+
+    // Cambio de sede
+    document.getElementById('sedeSelect').addEventListener('change', async function () {
+        const codSede = this.value;
+        const responsableSelect = document.getElementById('responsableSelect');
+        const carrerasContainer = document.getElementById('carrerasContainer');
+        const carrerasPlaceholder = document.getElementById('carrerasPlaceholder');
+        const carrerasBuscador = document.getElementById('carrerasBuscador');
+
+        if (!codSede) {
+            resetFields();
+            return;
+        }
+
+        carrerasBuscador.value = '';
+        carrerasSeleccionadas.clear(); // limpiar selección al cambiar sede
+
+        try {
+            const res = await fetch(`/dashboard/eventos/api/sede/${codSede}`);
+            const data = await res.json();
+
+            // Responsables
+            responsableSelect.innerHTML = '<option value="">Seleccionar responsable...</option>';
+            data.responsables.forEach(resp => {
+                const option = document.createElement('option');
+                option.value = resp.id;
+                option.textContent = resp.nombre;
+                responsableSelect.appendChild(option);
+            });
+            responsableSelect.disabled = false;
+            responsableSelect.classList.remove('bg-gray-100');
+
+            // Carreras
+            carrerasActuales = data.carreras;
+            renderCarreras(carrerasActuales);
+
+            carrerasContainer.classList.remove('hidden');
+            carrerasPlaceholder.classList.add('hidden');
+
+        } catch (error) {
+            console.error('Error al cargar datos de la sede:', error);
+            carrerasBuscador.value = '';
+            resetFields();
+        }
+    });
+
+    function resetFields() {
+        document.getElementById('responsableSelect').innerHTML = '<option value="">Primero selecciona una sede...</option>';
+        document.getElementById('responsableSelect').disabled = true;
+        document.getElementById('responsableSelect').classList.add('bg-gray-100');
+        document.getElementById('carrerasContainer').classList.add('hidden');
+        document.getElementById('carrerasPlaceholder').classList.remove('hidden');
+    }
+
+    
+ // ========== SELECTOR DE COLORES MEJORADO ==========
+        
+        // Paleta de colores predefinidos
+        const coloresPredefinidos = [
+            { nombre: 'Azul Océano', valor: 'azul_oceano', hex: '#0ea5e9' },
+            { nombre: 'Verde Esmeralda', valor: 'verde_esmeralda', hex: '#10b981' },
+            { nombre: 'Rojo Coral', valor: 'rojo_coral', hex: '#f43f5e' },
+            { nombre: 'Naranja Sunset', valor: 'naranja_sunset', hex: '#f97316' },
+            { nombre: 'Morado Místico', valor: 'morado_mistico', hex: '#8b5cf6' },
+            { nombre: 'Rosa Sakura', valor: 'rosa_sakura', hex: '#ec4899' },
+            { nombre: 'Amarillo Sol', valor: 'amarillo_sol', hex: '#eab308' },
+            { nombre: 'Turquesa Tropical', valor: 'turquesa_tropical', hex: '#06b6d4' },
+            { nombre: 'Índigo Profundo', valor: 'indigo_profundo', hex: '#6366f1' },
+            { nombre: 'Verde Lima', valor: 'verde_lima', hex: '#84cc16' },
+            { nombre: 'Rosa Flamingo', valor: 'rosa_flamingo', hex: '#f472b6' },
+            { nombre: 'Gris Elegante', valor: 'gris_elegante', hex: '#6b7280' }
+        ];
+        
+        // Inicializar selector de colores
+        function initColorPicker() {
+            const colorGrid = document.getElementById('colorGrid');
+            const colorCustomPicker = document.getElementById('colorCustomPicker');
+            
+            // Generar grid de colores predefinidos
+            coloresPredefinidos.forEach(color => {
+                const colorOption = document.createElement('div');
+                colorOption.className = 'color-option';
+                colorOption.style.backgroundColor = color.hex;
+                colorOption.dataset.colorName = color.nombre;
+                colorOption.dataset.colorValue = color.valor;
+                colorOption.dataset.colorHex = color.hex;
+                colorOption.title = color.nombre;
+                
+                colorOption.addEventListener('click', () => selectColor(color.nombre, color.valor, color.hex, colorOption));
+                colorGrid.appendChild(colorOption);
+            });
+            
+            // Manejar color personalizado
+            colorCustomPicker.addEventListener('change', function() {
+                const customHex = this.value;
+                const customName = `Color Personalizado (${customHex.toUpperCase()})`;
+                const customValue = `custom_${customHex.substring(1)}`;
+                
+                // Deseleccionar otros colores
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                selectColor(customName, customValue, customHex, null);
+            });
+        }
+        
+        // Función para seleccionar color
+        function selectColor(nombre, valor, hex, elemento) {
+            // Actualizar campos ocultos
+            document.getElementById('colorEventoHidden').value = valor;
+            document.getElementById('colorHexHidden').value = hex;
+            
+            // Actualizar vista previa
+            const colorPreview = document.getElementById('colorPreviewSelected');
+            const colorName = document.getElementById('colorNameSelected');
+            
+            colorPreview.style.backgroundColor = hex;
+            colorPreview.style.borderColor = hex;
+            colorName.textContent = nombre;
+            
+            // Actualizar selección visual
+            if (elemento) {
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                elemento.classList.add('selected');
+            }
+            
+            // Validar campo requerido
+            document.getElementById('colorEventoHidden').dispatchEvent(new Event('change'));
+        }
+        
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            initColorPicker();
+        });
+
+
+    // ---------- CAMPOS : Fecha Inicio, Fecha Termino, validadores ----------
+    function validateDates() {
+        const fechaInicioInput = document.querySelector('input[name="fecha_inicio"]');
+        const fechaTerminoInput = document.querySelector('input[name="fecha_termino"]');
+
+        if (fechaInicioInput.value && fechaTerminoInput.value) {
+            const fechaInicio = new Date(fechaInicioInput.value);
+            const fechaTermino = new Date(fechaTerminoInput.value);
+
+            if (fechaTermino <= fechaInicio) {
+              Swal.fire('Error',  'La fecha de término debe ser posterior a la fecha de inicio', 'error');
+
+                return false;
+            }
+        }
+        return true;
+    }
+
+    document.querySelector('input[name="fecha_inicio"]').addEventListener('change', function () {
+        const fechaTerminoInput = document.querySelector('input[name="fecha_termino"]');
+        if (fechaTerminoInput.value) {
+            if (!validateDates()) {
+                this.value = '';
+            }
+        }
+    });
+
+    document.querySelector('input[name="fecha_termino"]').addEventListener('change', function () {
+        const fechaInicioInput = document.querySelector('input[name="fecha_inicio"]');
+        if (fechaInicioInput.value) {
+            if (!validateDates()) {
+                this.value = '';
+            }
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+  const toggle = document.getElementById("eventoRecurrente");
+  const toggleColor = document.getElementById("selectorColor");
+  const selectorColorContainer = document.getElementById("selectorDeColorContainer");
+
+  const fechasManualConfig = document.getElementById("fechasManualConfig");
+  const fechasUnicas = document.getElementById("fechasUnicas");
+
+  // Función principal para actualizar vista
+  function actualizarVista() {
+    if (toggle.checked) {
+      // Oculta fechas únicas y muestra selector
+      fechasUnicas.style.display = "none";
+      fechasManualConfig.style.display = "block";
+        
+     
+    } else {
+      // Si no es recurrente: mostrar fechas únicas y ocultar todo lo demás
+      fechasUnicas.style.display = "grid";
+      fechasManualConfig.style.display = "none";
+    }
+  }
+  function actualizarVistaColor() {
+    if (toggleColor.checked) {
+      // Oculta fechas únicas y muestra selector
+      selectorColorContainer.style.display = "block";
+
+     
+    } else {
+      selectorColorContainer.style.display = "none";
+    }
+  }
+
+  // Eventos
+  toggle.addEventListener("change", actualizarVista);
+  toggleColor.addEventListener("change", actualizarVistaColor);
+
+  // Estado inicial
+  actualizarVista();
+  actualizarVistaColor();
+});
+
+
+let contadorFechasManual = 0;
+let fechasManualArray = [];
+
+// Función para agregar nueva fecha manual
+function agregarNuevaFecha() {
+    contadorFechasManual++;
+    const fechaId = `fecha_manual_${contadorFechasManual}`;
+    
+    const fechaItem = document.createElement('div');
+    fechaItem.className = 'evento-fecha-manual-item';
+    fechaItem.id = fechaId;
+
+    fechaItem.innerHTML = `
+        <div class="evento-fecha-manual-header">
+            <span class="evento-fecha-manual-numero">Evento #${contadorFechasManual}</span>
+            <button type="button" class="evento-btn-eliminar-fecha" 
+                onclick="eliminarFechaManual('${fechaId}')">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 
+                             01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 
+                             00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                    </path>
+                </svg>
+                Eliminar
+            </button>
+        </div>
+        <div class="evento-fecha-manual-campos">
+            <div class="evento-campo-grupo">
+                <label class="evento-campo-etiqueta">Fecha y Hora de Inicio *</label>
+                <input type="datetime-local" name="fechas_manual_inicio[]"  
+                       class="form-input fecha-manual-input fecha-inicio" onchange="validarSecuenciaFechas(); actualizarResumenFechasManual();">
+            </div>
+            <div class="evento-campo-grupo">
+                <label class="evento-campo-etiqueta">Fecha y Hora de Término *</label>
+                <input type="datetime-local" name="fechas_manual_termino[]"  
+                       class="form-input fecha-manual-input fecha-fin" onchange="validarSecuenciaFechas(); actualizarResumenFechasManual();">
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('fechasManualContainer').appendChild(fechaItem);
+    fechasManualArray.push(fechaId);
+
+    // Si no es el primer evento, prellenar inicio con el fin del anterior
+    if (contadorFechasManual > 1) {
+        const prevFin = document.querySelectorAll('input[name="fechas_manual_termino[]"]')[contadorFechasManual - 2].value;
+        if (prevFin) {
+            fechaItem.querySelector('.fecha-inicio').value = prevFin;
+        }
+    }
+
+    actualizarBotonesEliminar();
+    actualizarResumenFechasManual();
+}
+
+// Función para eliminar fecha manual (solo última)
+function eliminarFechaManual(fechaId) {
+    const ultimaId = fechasManualArray[fechasManualArray.length - 1];
+    
+    if (fechaId === ultimaId && fechaId !== "fecha_manual_1") {
+        const fechaElement = document.getElementById(fechaId);
+        if (fechaElement) {
+            fechaElement.remove();
+            fechasManualArray.pop();
+            arrayFechasRecurrentes.pop();
+            contadorFechasManual--;
+            actualizarBotonesEliminar();
+            actualizarResumenFechasManual();
+        }
+    }
+}
+
+// 🔑 Función para controlar qué botón eliminar se muestra
+function actualizarBotonesEliminar() {
+    const items = document.querySelectorAll('.evento-fecha-manual-item');
+    items.forEach((item, index) => {
+        const boton = item.querySelector('.evento-btn-eliminar-fecha');
+        if (!boton) return;
+        if (index === items.length - 1 && index !== 0) {
+            boton.style.display = 'inline-flex';
+        } else {
+            boton.style.display = 'none';
+        }
+    });
+}
+
+// 🔎 Validación de secuencia y de cada dupla
+function validarSecuenciaFechas() {
+    const eventos = document.querySelectorAll('.evento-fecha-manual-item');
+
+    eventos.forEach((evento, i) => {
+        const inicioInput = evento.querySelector('.fecha-inicio');
+        const finInput = evento.querySelector('.fecha-fin');
+
+        // 🔹 Bloqueo en orden: no se puede completar si el anterior no tiene fechas válidas
+        if (i > 0) {
+            const prevInicio = eventos[i - 1].querySelector('.fecha-inicio').value;
+            const prevFin = eventos[i - 1].querySelector('.fecha-fin').value;
+            if (!prevInicio || !prevFin) {
+                inicioInput.value = "";
+                finInput.value = "";
+                inicioInput.disabled = true;
+                finInput.disabled = true;
+                return; // no permitir edición
+            } else {
+                inicioInput.disabled = false;
+                finInput.disabled = false;
+            }
+        } else {
+            inicioInput.disabled = false;
+            finInput.disabled = false;
+        }
+
+        if (inicioInput.value && finInput.value) {
+            const inicio = new Date(inicioInput.value);
+            const fin = new Date(finInput.value);
+
+            // 🔴 Regla local: el fin no puede ser menor o igual al inicio
+            if (fin <= inicio) {
+                Swal.fire('Error',  `En el Evento #${i + 1}, la fecha de término debe ser posterior a la fecha de inicio.', 'error`);
+
+                finInput.value = ""; // limpiar fin inválido
+                return;
+            }
+        }
+
+        // 🔴 Regla global: inicio de este evento > fin del anterior
+        if (i > 0 && inicioInput.value) {
+            const prevFinInput = eventos[i - 1].querySelector('.fecha-fin');
+            if (prevFinInput.value) {
+                const prevFin = new Date(prevFinInput.value);
+                const currInicio = new Date(inicioInput.value);
+
+                if (currInicio <= prevFin) {
+                    Swal.fire('Error',  `El inicio del Evento #${i + 1} debe ser posterior al fin del Evento #${i}', 'error`);
+
+                    inicioInput.value = ""; // limpiar inicio inválido
+                }
+            }
+        }
+    });
+}
+
+let arrayFechasRecurrentes = []
+// Función para actualizar resumen de fechas manual
+function actualizarResumenFechasManual() {
+    const resumenContent = document.getElementById('resumenFechasContent');
+    const inicios = document.querySelectorAll('input[name="fechas_manual_inicio[]"]');
+    const terminos = document.querySelectorAll('input[name="fechas_manual_termino[]"]');
+
+  
+    
+    if (inicios.length === 0) {
+        resumenContent.innerHTML = 'No hay fechas agregadas aún. Haz clic en "Agregar Nueva Fecha" para comenzar.';
+        return;
+    }
+    
+    let fechasValidas = [];
+    arrayFechasRecurrentes = []
+
+    inicios.forEach((input, index) => {
+        const inicio = input.value ? new Date(input.value) : null;
+        const fin = terminos[index].value ? new Date(terminos[index].value) : null;
+
+        if (inicio && fin) {
+            const inicioStr = inicio.toLocaleDateString('es-ES', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            const finStr = fin.toLocaleDateString('es-ES', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            fechasValidas.push(`Evento #${index + 1}: Inicio ${inicioStr} → Fin ${finStr}`);
+            arrayFechasRecurrentes.push({
+                evento: index + 1,
+                inicio: inicio.toISOString(),
+                fin: fin.toISOString()
+            });
+           
+        }
+         
+    });
+    
+    if (fechasValidas.length === 0) {
+        resumenContent.innerHTML = 'Completa las fechas para ver el resumen.';
+        return;
+    }
+    
+    resumenContent.innerHTML = `
+        ${fechasValidas.map(fecha => `<div class="evento-resumen-fecha">${fecha}</div>`).join('')}
+        <div class="evento-resumen-contador">
+            Total: ${fechasValidas.length} evento${fechasValidas.length !== 1 ? 's' : ''} programado${fechasValidas.length !== 1 ? 's' : ''}
+        </div>
+    `;
+
+    console.log(fechasManualArray)
+    console.log(arrayFechasRecurrentes)
+    
+}
+
+// Función para limpiar fechas manual
+function limpiarFechasManual() {
+    document.getElementById('fechasManualContainer').innerHTML = '';
+    fechasManualArray = [];
+    contadorFechasManual = 0;
+    actualizarResumenFechasManual();
+}
+
+// Event listener para agregar fecha
+document.getElementById('agregarFechaBtn').addEventListener('click', agregarNuevaFecha);
+
+// 🚀 Agregar una fecha inicial obligatoria al cargar
+document.addEventListener("DOMContentLoaded", function() {
+    if (fechasManualArray.length === 0) {
+        agregarNuevaFecha();
+    }
+});
+
+
+
+
+
+    // ---------- CAMPOS : ROL DE LA ORGANIZACIÓN, bloqueo inicial  de todos los campos hasta que se seleccione una opción ----------
+    document.addEventListener('DOMContentLoaded', () => {
+        const rolSelect = document.getElementById('rolOrganizacionSelect');
+        const form = document.getElementById('eventForm');
+        const sedeSelect = document.getElementById('sedeSelect');
+        const ubicacionInput = form.querySelector('input[name="ubicacion"]');
+
+        // Selecciona todos los inputs y selects excepto "nombre_actividad" y el rol
+        const camposDependientes = Array.from(form.querySelectorAll('input, select, textarea'))
+        .filter(el => !['nombre_actividad', 'publico_interno', 'publico_externo'].includes(el.name) 
+               && el.id !== 'rolOrganizacionSelect');
+
+        // Inicialmente deshabilitar todo (incluida ubicación)
+        camposDependientes.forEach(el => {
+            el.disabled = true;
+            el.classList.add('bg-gray-100');
+        });
+
+        // Regla específica para Ubicación
+        function aplicarReglasUbicacion() {
+            const rol = rolSelect.value;
+
+            if (rol === '1') { // Organizadores
+            if (!sedeSelect.value) {
+                // Bloqueada hasta elegir sede
+                ubicacionInput.disabled = true;
+                ubicacionInput.classList.add('bg-gray-100');
+                ubicacionInput.placeholder = 'Seleccione una sede...';
+                ubicacionInput.value = '';
+            } else {
+                // Sede elegida: autocompletar con nombre de sede y habilitar
+                const nombreSede = sedeSelect.options[sedeSelect.selectedIndex].textContent.trim();
+                ubicacionInput.value = nombreSede;
+                ubicacionInput.disabled = false;
+                ubicacionInput.classList.remove('bg-gray-100');
+                ubicacionInput.placeholder = '';
+            }
+            } else if (rol === '2') { // Participantes
+            // Siempre habilitada y editable, sin mensaje
+            ubicacionInput.disabled = false;
+            ubicacionInput.classList.remove('bg-gray-100');
+            ubicacionInput.placeholder = '';
+            // No sobreescribimos el valor: el usuario escribe lo que quiera
+            } else {
+            // Sin rol seleccionado (estado inicial)
+            ubicacionInput.disabled = true;
+            ubicacionInput.classList.add('bg-gray-100');
+            ubicacionInput.placeholder = '';
+            ubicacionInput.value = '';
+            }
+        }
+
+        // Escuchar cambios en el rol
+        rolSelect.addEventListener('change', () => {
+            const hayRol = Boolean(rolSelect.value);
+
+            // Habilitar/Deshabilitar todos los dependientes en general
+            camposDependientes.forEach(el => {
+            el.disabled = !hayRol;
+            el.classList.toggle('bg-gray-100', !hayRol);
+            });
+
+            // Aplicar la regla especial de Ubicación según rol y sede
+            aplicarReglasUbicacion();
+        });
+
+        // Escuchar cambios en sede para el caso de Organizadores
+        sedeSelect.addEventListener('change', aplicarReglasUbicacion);
+
+        // Estado inicial
+        aplicarReglasUbicacion();
+    });
+
+
+    // ---------- CAMPOS : Tipo Público, según lo seleccionado se desglosa el público además se bloquea el publico interno y externo dependiendo decisión ----------
+    let categoriasActuales = []; 
+    let categoriasSeleccionadas = []; 
+    const categoriasPublico = <%- JSON.stringify(categoriasPublico) %>;
+    console.log("Mixto IDs:", categoriasPublico.mixto.map(c => c.id));
+
+
+    // Renderizar categorías
+    function renderCategorias(categorias) {
+        const categoriasList = document.getElementById('categoriasList');
+        categoriasList.innerHTML = '';
+
+        categorias.forEach(cat => {
+            const div = document.createElement('div');
+            div.className = 'flex items-center';
+
+            const checked = categoriasSeleccionadas.some(sel => sel.id === cat.id);
+
+            div.innerHTML = `
+                <input type="checkbox" id="categoria_${cat.id}" 
+                    name="categorias_publico" 
+                    value="${cat.id}" 
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    ${checked ? 'checked' : ''}>
+                <label for="categoria_${cat.id}" class="ml-2 text-sm text-gray-700 cursor-pointer">${cat.nombre}</label>
+            `;
+            categoriasList.appendChild(div);
+
+            const checkbox = div.querySelector('input');
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    if (!categoriasSeleccionadas.some(sel => sel.id === cat.id)) {
+                        categoriasSeleccionadas.push({ id: cat.id, id_tipo: cat.id_tipo });
+                    }
+                } else {
+                    categoriasSeleccionadas = categoriasSeleccionadas.filter(sel => sel.id !== cat.id);
+                }
+                console.log(categoriasSeleccionadas);
+                updateCategoriasCount();
+            });
+        });
+    }
+
+    function updateCategoriasCount() {
+        const count = categoriasSeleccionadas.length;
+        document.getElementById('categoriasSeleccionadas').textContent =
+        `${count} categoría${count !== 1 ? 's' : ''} seleccionada${count !== 1 ? 's' : ''}`;
+    }
+
+    // Cambio de tipo de público
+    document.getElementById('tipoPublicoSelect').addEventListener('change', function() {
+        const tipo = this.value;
+        const contenedor = document.getElementById('categoriasContainer');
+        const placeholder = document.getElementById('categoriasPlaceholder');
+
+        if (tipo && categoriasPublico[tipo]) {
+            categoriasActuales = categoriasPublico[tipo];
+            categoriasSeleccionadas = [];  // limpiar array
+            renderCategorias(categoriasActuales);
+
+            contenedor.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+            updateCategoriasCount();
+        } else {
+            contenedor.classList.add('hidden');
+            placeholder.classList.remove('hidden');
+            categoriasSeleccionadas = [];  // limpiar array
+            updateCategoriasCount();
+        }
+    });
+
+    // Referencias a los campos
+    const publicoInterno = document.getElementById('publicoInterno');
+    const publicoExterno = document.getElementById('publicoExterno');
+
+    // Inicialmente deshabilitados
+    publicoInterno.disabled = true;
+    publicoExterno.disabled = true;
+    publicoInterno.classList.add('bg-gray-100');
+    publicoExterno.classList.add('bg-gray-100');
+
+    // Cambio de tipo de público
+    document.getElementById('tipoPublicoSelect').addEventListener('change', function() {
+        const tipo = this.value;
+
+
+        // Reiniciar: deshabilitar todo
+        publicoInterno.disabled = true;
+        publicoExterno.disabled = true;
+        publicoExterno.value = '';
+        publicoInterno.value = '';
+        document.querySelector('input[name="capacidad"]').value = '';
+        publicoInterno.classList.add('bg-gray-100');
+        publicoExterno.classList.add('bg-gray-100');
+
+        if (tipo === 'interno') {
+            publicoInterno.disabled = false;
+            publicoInterno.classList.remove('bg-gray-100');
+        } else if (tipo === 'externo') {
+            publicoExterno.disabled = false;
+            publicoExterno.classList.remove('bg-gray-100');
+        } else if (tipo === 'mixto') {
+            publicoInterno.disabled = false;
+            publicoExterno.disabled = false;
+            publicoInterno.classList.remove('bg-gray-100');
+            publicoExterno.classList.remove('bg-gray-100');
+        }
+    });
+
+
+    // ---------- CAMPOS : SUBMIT, creación objeto eventData ----------
+
+    document.getElementById('eventForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const toggle = document.getElementById("eventoRecurrente");
+
+    // Recopilar datos del formulario
+    const formData = new FormData(this);
+    const eventData = Object.fromEntries(formData);
+
+    // Carreras seleccionadas
+    eventData.carreras_participantes = Array.from(
+        document.querySelectorAll('input[name="carreras_participantes"]:checked')
+    ).map(checkbox => checkbox.value);
+
+    // IDs de detalle público
+    eventData.IDs_Detalle_Publico = categoriasSeleccionadas.map(c => c.id);
+    eventData.ID_Tipo_Publico = categoriasSeleccionadas.length > 0 
+        ? categoriasSeleccionadas[0].id_tipo 
+        : null;
+
+    if (eventData.IDs_Detalle_Publico.length === 0) {
+        Swal.fire({ icon: 'warning', title: 'Atención', text: 'Debes seleccionar al menos una categoría de público antes de continuar.', confirmButtonColor: '#1D4ED8' });
+        return false;
+    }
+
+     // --- Color del evento ---
+    const colorEventoHidden = document.getElementById('colorEventoHidden');
+    const colorHexHidden = document.getElementById('colorHexHidden');
+
+    // Si no hay color seleccionado, asignar uno por defecto
+    if (!colorEventoHidden.value || !colorHexHidden.value) {
+        colorEventoHidden.value = 'Celeste Predeterminado';
+        colorHexHidden.value = '#00BFFF';
+        
+        // Actualizar preview
+        const colorPreview = document.getElementById('colorPreviewSelected');
+        const colorName = document.getElementById('colorNameSelected');
+        colorPreview.style.backgroundColor = '#00BFFF';
+        colorPreview.style.borderColor = '#00BFFF';
+        colorName.textContent = 'Celeste Predeterminado';
+    }
+
+    // Asignar valores al FormData final
+    eventData.color_evento = colorEventoHidden.value;
+    eventData.color_hex = colorHexHidden.value;
+
+    if (eventData.carreras_participantes.length === 0) {
+        Swal.fire({ icon: 'warning', title: 'Atención', text: 'Debes seleccionar al menos una carrera antes de continuar.', confirmButtonColor: '#1D4ED8' });
+        return false;
+    }
+
+    try {
+        if (toggle.checked) {
+            // 🔹 Evento recurrente → enviar uno por cada fecha
+            for (const fechaObj of arrayFechasRecurrentes) {
+                const payload = {
+                    ...eventData,
+                    nombre_actividad: `${eventData.nombre_actividad} #${fechaObj.evento}`,
+                    fecha_inicio: formatDateTime(fechaObj.inicio),
+                    fecha_termino: formatDateTime(fechaObj.fin)
+                };
+
+                await fetch('/dashboard/eventos/api/eventos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            Swal.fire(
+                '¡Creado!',
+                `${arrayFechasRecurrentes.length} eventos recurrentes han sido creados.`,
+                'success'
+            ).then(() => window.location.reload());
+
+        } else {
+            const res = await fetch('/dashboard/eventos/api/eventos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(eventData)
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                closeModal();
+                this.reset();
+                Swal.fire('¡Creado!', 'El evento ha sido creado.', 'success').then(() => {
+                    window.location.reload();
+                });
+            } else {
+                Swal.fire('Error', data.error || 'Error desconocido', 'error');
+            }
+        }
+    } catch (error) {
+        console.error('Error al enviar el evento:', error);
+         Swal.fire('Error', data.error || 'Error desconocido', 'error');
+
+    }
+});
+
+
+function formatDateTime(dateString) {
+    const d = new Date(dateString);
+    const pad = (n) => (n < 10 ? '0' + n : n);
+
+    return (
+        d.getFullYear() +
+        '-' +
+        pad(d.getMonth() + 1) +
+        '-' +
+        pad(d.getDate()) +
+        ' ' +
+        pad(d.getHours()) +
+        ':' +
+        pad(d.getMinutes()) +
+        ':' +
+        pad(d.getSeconds())
+    );
+}
+
+    /* ///////////////////////////////////////////////////// MODAL EDITAR EVENTO ////////////////////////////////////////////////////////////////////*/
+
+    function renderTipoPublicoEdit(categorias){
+        const categoriasList = document.getElementById('categoriasListEditar');
+        categoriasList.innerHTML = '';
+
+        categorias.forEach(cat => {
+            const div = document.createElement('div');
+            div.className = 'flex items-center';
+
+            const checked = categoriasSeleccionadasEditar.some(sel => sel.id === cat.id);
+
+            div.innerHTML = `
+                <input type="checkbox" id="categoria_${cat.id}" 
+                    name="categorias_publicoEditar" 
+                    value="${cat.id}" 
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    ${checked ? 'checked' : ''}>
+                <label for="categoria_${cat.id}" class="ml-2 text-sm text-gray-700 cursor-pointer">${cat.nombre}</label>
+            `;
+            categoriasList.appendChild(div);
+
+            const checkbox = div.querySelector('input');
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    if (!categoriasSeleccionadasEditar.some(sel => sel.id === cat.id)) {
+                        categoriasSeleccionadasEditar.push({ id: cat.id, id_tipo: cat.id_tipo });
+                    }
+                } else {
+                    categoriasSeleccionadasEditar = categoriasSeleccionadasEditar.filter(sel => sel.id !== cat.id);
+                }
+                console.log(categoriasSeleccionadasEditar);
+            });
+        });
+    }
+
+    let categoriasActualesEditar = []; 
+    let categoriasSeleccionadasEditar = []; 
+
+    let id_publico = document.getElementById('tipoPublicoSelectEditar');
+
+    function idATipo(id, detalle){
+        let tipo;
+         if(id == 1){
+            tipo = 'interno';
+        } else if(id == 2){
+            tipo = 'externo';
+        } else {
+            tipo = 'mixto'
+        }
+        const contenedor = document.getElementById('categoriasContainerEditar');
+        const placeholder = document.getElementById('categoriasPlaceholderEditar');
+
+        if (tipo && categoriasPublico[tipo]) {
+            categoriasActualesEditar = categoriasPublico[tipo];
+
+            categoriasSeleccionadasEditar = categoriasActualesEditar
+                .filter(cat => detalle.includes(cat.id))
+                .map(cat => ({ id: cat.id, id_tipo: cat.id_tipo }));
+
+            // Renderizamos teniendo en cuenta las seleccionadas
+            renderTipoPublicoEdit(categoriasActualesEditar);
+
+            contenedor.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+
+        } else {
+            contenedor.classList.add('hidden');
+            placeholder.classList.remove('hidden');
+            categoriasSeleccionadasEditar = [];
+        }
+   
+    }
+
+    id_publico.addEventListener('change', function(){
+        id = document.querySelector('[name="tipo_publicoEditar"]').value
+        let tipo;
+        console.log(id)
+        if(id == 1){
+            tipo = 'interno';
+        } else if(id == 2){
+            tipo = 'externo';
+        } else {
+            tipo = 'mixto'
+        }
+        
+        console.log(tipo)
+
+        const contenedor = document.getElementById('categoriasContainerEditar');
+        const placeholder = document.getElementById('categoriasPlaceholderEditar');
+
+        if (tipo && categoriasPublico[tipo]) {
+            categoriasActualesEditar = categoriasPublico[tipo];
+            categoriasSeleccionadasEditar = [];  // limpiar array
+            renderTipoPublicoEdit(categoriasActualesEditar);
+
+            contenedor.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+            
+        } else {
+            contenedor.classList.add('hidden');
+            placeholder.classList.remove('hidden');
+            categoriasSeleccionadasEditar = [];  // limpiar array
+        }
+   
+    })
+
+
+   function formatDateForInput(fecha, hora) {
+    // Asegurarse de tomar solo horas y minutos de la hora
+    const [h, m] = hora.split(':');
+
+    const date = new Date(fecha);
+    date.setHours(parseInt(h, 10));
+    date.setMinutes(parseInt(m, 10));
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+
+    async function openModalEditar(idEvento) {
+  const id = idEvento;
+
+  try {
+    const res = await fetch(`/dashboard/eventos/api/eventos/${id}`);
+    if (!res.ok) throw new Error('Error al obtener datos');
+    const eventoEditar = await res.json();
+
+    // Rellenar cada campo del modal con los datos
+    document.querySelector('[name="nombre_actividadEditar"]').value = eventoEditar.Nombre;
+    document.querySelector('[name="rol_organizadorEditar"]').value = eventoEditar.Rol_Organizacion;
+    document.querySelector('[name="ubicacionEditar"]').value = eventoEditar.Ubicacion;
+     document.querySelector('[name="sede_organizadoraEditar"]').value = eventoEditar.Sede_Organizadora;
+     document.querySelector('[name="descripcionEditar"]').value = eventoEditar.Descripcion;
+    document.querySelector('[name="origen_actividadEditar"]').value = eventoEditar.Id_Origen;
+    document.querySelector('[name="categoriaEditar"]').value = eventoEditar.Categoria;
+    document.querySelector('[name="intersedeEditar"]').value = eventoEditar.Intersede;
+     document.querySelector('[name="responsableEditar"]').value = eventoEditar.Nombre_Responsable;
+    document.querySelector('[name="carreras_participantesEditar"]').value = eventoEditar.carreras_nombres;
+    document.querySelector('[name="fecha_inicioEditar"]').value = formatDateForInput(eventoEditar.Fecha_Inicio,eventoEditar.Hora_Inicio);
+
+    document.querySelector('[name="fecha_terminoEditar"]').value = formatDateForInput(eventoEditar.Fecha_Termino,eventoEditar.Hora_Termino) ;
+     document.querySelector('[name="tipo_publicoEditar"]').value = eventoEditar.ID_Tipo_Publico;
+     
+     idATipo(document.querySelector('[name="tipo_publicoEditar"]').value, eventoEditar.IDs_Detalle_Publico)
+       
+     document.querySelector('[name="publico_internoEditar"]').value = eventoEditar.Publico_Interno_Proyectado  || 0;
+    document.querySelector('[name="publico_externoEditar"]').value = eventoEditar.Publico_Externo_Proyectado  || 0;
+    document.querySelector('[name="capacidadEditar"]').value = eventoEditar.Capacidad || null;
+    document.querySelector('[name="tipo_actividad_vcmEditar"]').value = eventoEditar.Tipo_Actividad_VCM  || null;
+    document.querySelector('[name="entidad_relacionada_vcmEditar"]').value = eventoEditar.Entidad_Relacionada_VCM  || null;
+    document.querySelector('[name="principios_politica_vcmEditar"]').value = eventoEditar.Principios_Politica_Aborda_VCM  || null;
+    document.querySelector('[name="objetivo_vcmEditar"]').value = eventoEditar.Objetivo_VCM  || null;
+    document.querySelector('[name="ambito_accion_vcmEditar"]').value = eventoEditar.Ambito_Accion_Actividad_VCM  || null;
+    document.querySelector('[name="gasto_proyectadoEditar"]').value = eventoEditar.Gasto  || 0;
+    document.querySelector('[name="estatusEditar"]').value = eventoEditar.Id_Estatus;
+    document.querySelector('[name="aplico_encuestaEditar"]').value = eventoEditar.Aplico_Encuesta;
+    document.querySelector('[name="link_encuestaEditar"]').value = eventoEditar.Link_Encuesta  || null;
+    document.querySelector('[name="idEventoEditar"]').value = eventoEditar.Id  || null;
+    document.querySelector('[name="link_evidenciaEditar"]').value = eventoEditar.Link_Evidencia  || null;
+
+    // Abrir modal
+    document.getElementById('EditarModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+
+
+
+  } catch (err) {
+    console.error(err);
+    alert('Error al cargar datos del evento');
+  }
+}
+
+document.getElementById('editForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const id = formData.get('idEditar');
+
+    const eventData = Object.fromEntries(formData);
+    eventData.detalleTipoPublicoEditar = categoriasSeleccionadasEditar.map(cat => cat.id);
+
+    console.log(eventData)
+
+      if (eventData.detalleTipoPublicoEditar.length === 0) {
+            e.preventDefault(); // Detener envío del formulario
+            Swal.fire({
+                icon: 'warning',
+                title: 'Atención',
+                text: 'Debes seleccionar al menos una categoría de público antes de continuar.',
+                confirmButtonColor: '#1D4ED8'
+            });
+            return false;
+        }
+  
+            
+        const res = await fetch(`/dashboard/eventos/api/eventos/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(eventData)
+        });
+
+  
+        if (res.ok) {
+            closeModalEditar();
+            
+            Swal.fire(
+            '¡Completado!',
+            'El evento ha sido actualizado.',
+            'success'
+            ).then(() => {
+            window.location.reload();
+            });
+
+        } else {
+            const data = await res.json();
+            Swal.fire('Error', data.error || 'Error desconocido', 'error');
+        }
+
+});
+
+console.log( <%- JSON.stringify(Usuario) %>);
+
+
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "Cibervoluntarios",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@bitjson/qr-code": "^1.0.2",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "exceljs": "^4.4.0",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "express-socket.io-session": "^1.3.5",
+    "google-tts-api": "^2.0.2",
+    "ical-generator": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.10.3",
+    "nodemailer": "^6.9.13",
+    "qrcode": "^1.5.3",
+    "socket.io": "^4.7.5",
+    "zeptomail": "^6.0.0"
+  }
+}

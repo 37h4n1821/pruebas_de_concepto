@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cibervoluntarios - Autenticación</title>
+    <link rel="shortcut icon" href="/iconos/Ciber.ico">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link href="/css/auth.css" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="row g-0">
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="illustration-side">
+                    <div class="illustration-content">
+                        <div class="illustration-title">Conectando voluntarios con causas digitales</div>
+                        <img src="https://i.imgur.com/bguYQFJ.png" class="illustration-img" alt="Cibervoluntarios">
+                        <p class="illustration-text">Únete a nuestra comunidad de cibervoluntarios y ayuda a construir un mundo digital más inclusivo para todos.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-side">
+                    <div class="logo">
+                        <div class="logo-text">Ciber<span>Voluntarios</span></div>
+                    </div>
+                    
+                    <!-- Tabs de navegación -->
+                    <ul class="nav nav-tabs auth-tabs justify-content-center mb-4" id="authTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Iniciar Sesión</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Registrarse</button>
+                        </li>
+                        <div class="slider" style="width: 141px; transform: translateX(0px);"></div>
+                    </ul>
+                    
+                    <div class="tab-content" id="authTabsContent">
+                        <!-- Formulario de Login -->
+                        <div class="tab-pane fade show active" id="login" role="tabpanel">
+                            <h2 class="form-title">Bienvenido de vuelta</h2>
+                            
+                            
+                            
+                            <div class="divider">
+                            </div>
+                            
+                            <form class="user" id="loginFormulario">
+                                <div class="form-group">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                    <input type="email" class="form-control form-control-user" name="email" id="loginEmail" placeholder="Ingresa tu correo electrónico" required>
+                                </div>
+                                <div class="form-group">
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <input type="password" name="password" class="form-control form-control-user" id="loginPassword" placeholder="Contraseña" required>
+                                    <i class="fas fa-eye-slash password-toggle" id="toggleLoginPassword"></i>
+                                </div>
+                                <div class="form-group d-flex justify-content-between align-items-center">
+                                    <!-- <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="recordarme">
+                                        <label class="form-check-label" for="recordarme">Recordarme</label>
+                                    </div> -->
+                                    <a href="#" class="forgot-password" id="forgotPasswordLink">¿Olvidaste tu contraseña?</a>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-user btn-block w-100 mb-3">
+                                    Iniciar sesión
+                                </button>
+                            </form>
+                            
+                            <div class="auth-footer">
+                                ¿No tienes una cuenta? <a href="#" id="goToRegister">Regístrate ahora</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Formulario de Registro -->
+                        <div class="tab-pane fade" id="register" role="tabpanel">
+                            <h2 class="form-title">¡Únete a los cibervoluntarios!</h2>
+                            
+                         
+                            
+                            <div class="divider">
+                            </div>
+                            
+                            <form class="user"  id="registroFormulario">
+                            <div class="form-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" name="nombre" class="form-control form-control-user" id="registerName" placeholder="Nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" name="apellidoP" class="form-control form-control-user" id="registerPaternal" placeholder="Apellido paterno" required>
+                            </div>
+                            <div class="form-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" name="apellidoM" class="form-control form-control-user" id="registerMaternal" placeholder="Apellido materno" required>
+                            </div>
+                        
+                        
+                        <div class="form-group">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email"  name="correoRegistro" class="form-control form-control-user" id="registerEmail" placeholder="Correo electrónico" required>
+                        </div>
+                        
+                        <div class="form-group">
+                        <i class="fas fa-phone input-icon"></i>
+                        <input 
+                            type="tel" 
+                            name="celular" 
+                            class="form-control form-control-user" 
+                            id="registerPhone" 
+                            placeholder="+569XXXXXXXX" 
+                            pattern="\+569[0-9]{8}" 
+                            required
+                            value="+569"
+                        >
+                        </div>
+
+                        
+                       <div class="form-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" name="passwordRegistro" class="form-control form-control-user" id="registerPassword" placeholder="Contraseña" required>
+                            <i class="fas fa-eye-slash password-toggle" id="toggleRegisterPassword"></i>
+                            
+                            
+                        </div>
+                        <small class="text-danger" id="passwordError" style="display:none;"></small>
+
+                        <div class="form-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" class="form-control form-control-user" id="registerConfirmPassword" placeholder="Repetir contraseña" required>
+                            <i class="fas fa-eye-slash password-toggle" id="toggleRegisterConfirmPassword"></i>
+                            <small class="text-danger" id="confirmPasswordError" style="display:none;"></small>
+                        </div>
+
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="isStudentCheck">
+                                <label class="form-check-label" for="isStudentCheck">
+                                    Soy estudiante de la institución
+                                </label>
+                            </div>
+                        </div>
+
+                        
+                        
+                        <div class="student-fields" id="studentFields">
+                            <h5 class="mb-3">Información de estudiante</h5>
+                            
+                            <div class="form-group">
+                                <select name="sede" class="form-select" id="registerCampus">
+                                    <option  selected disabled>Seleccione una sede</option>
+                                    <% Sedes.forEach(sede => { %>
+                                        <option value="<%= sede.cod_sede%>"><%= sede.sede%></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <select name="jornada" class="form-select" id="registerSchedule">
+                                    <option selected disabled>Seleccione una jornada</option>
+                                    <% Jornada.forEach(jornada => { %>
+                                        <option value="<%= jornada.ID %>"><%= jornada.Jornada%></option>
+                                    <%})%>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <select name="carrera" class="form-select" id="registerCareer">
+                                    <option selected disabled>Seleccione una carrera</option>
+                                     <% Carreras.forEach(carrera => { %>
+                                        <option value="<%= carrera.ID%>"><%= carrera.carrera%></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                        
+                      <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="isColaboradorCheck">
+                                <label class="form-check-label" for="isColaboradorCheck">
+                                    Soy colaborador de la institución
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="student-fields" id="colaboradorFields">
+                            <h5 class="mb-3">Información del colaborador</h5>
+                            
+                            <div class="form-group">
+                                <select name="registerRol" class="form-select" id="registerRol">
+                                    <option  selected disabled>Seleccione un tipo</option>
+                                    <option value="colaborador">Colaborador</option>
+
+                                </select>
+                            </div>
+
+                           <div class="form-group">
+                                <select name="sedeColaborador" class="form-select" id="registerCampusColaborador">
+                                    <option  selected disabled>Seleccione una sede</option>
+                                    <% Sedes.forEach(sede => { %>
+                                        <option value="<%= sede.cod_sede%>"><%= sede.sede%></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            
+                            
+                        </div>
+                        
+                        <button id="submitCrearCuenta" type="submit" class="btn btn-primary btn-user btn-block w-100 mb-3">
+                            Crear cuenta
+                        </button>
+                    </form>
+                            
+                            <div class="auth-footer">
+                                ¿Ya tienes una cuenta? <a href="#" id="goToLogin">Inicia sesión</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Formulario de Recuperación de Contraseña (oculto inicialmente) -->
+                    <div id="recoverPassword" class="" style="display: none;">
+                        <div class="text-center mb-4">
+                            <h2 class="form-title">Recuperar contraseña</h2>
+                            <p class="text-muted">Ingresa tu correo electrónico y te enviaremos instrucciones para restablecer tu contraseña.</p>
+                        </div>
+                        
+                        <form class="user" id="recoverForm">
+                            <div class="form-group">
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" name="emailRecuperar" class="form-control form-control-user" id="recoverEmail" placeholder="Correo electrónico" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-user btn-block w-100 mb-3">
+                                Recuperar contraseña
+                            </button>
+                        </form>
+                        
+                        <div class="auth-footer">
+                            <a href="#" id="backToLogin"><i class="fas fa-arrow-left me-1"></i> Volver al inicio de sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Animación para el slider de pestañas
+            function moveSlider(tab) {
+                const tabWidth = tab.outerWidth();
+                const tabPosition = tab.position().left;
+                $('.slider').css({
+                    'width': tabWidth + 'px',
+                    'transform': 'translateX(' + tabPosition + 'px)'
+                });
+            }
+            
+            // Inicializar slider en la pestaña activa
+            moveSlider($('.auth-tabs .nav-link.active'));
+            
+            // Mover slider al hacer clic en una pestaña
+            $('.auth-tabs .nav-link').on('click', function() {
+                moveSlider($(this));
+            });
+            
+            // Alternar entre pestañas desde los enlaces
+            $('#goToRegister').click(function(e) {
+                e.preventDefault();
+                $('#register-tab').tab('show');
+                moveSlider($('#register-tab'));
+            });
+            
+            $('#goToLogin').click(function(e) {
+                e.preventDefault();
+                $('#login-tab').tab('show');
+                moveSlider($('#login-tab'));
+            });
+            
+            // Manejar el enlace de "¿Olvidaste tu contraseña?"
+            $('#forgotPasswordLink').click(function(e) {
+                e.preventDefault();
+                $('#authTabs, #authTabsContent').hide();
+                $('#recoverPassword').show();
+            });
+            
+            // Manejar el enlace de "Volver al inicio de sesión"
+            $('#backToLogin').click(function(e) {
+                e.preventDefault();
+                $('#recoverPassword').hide();
+                $('#authTabs, #authTabsContent').show();
+                $('#login-tab').tab('show');
+                moveSlider($('#login-tab'));
+            });
+
+             // Mostrar/ocultar campos de estudiante
+            $('#isStudentCheck').change(function() {
+                if(this.checked) {
+                    $('#studentFields').slideDown(300);
+                    $('#isColaboradorCheck').prop('disabled', true)
+                    // Hacer requeridos los campos de estudiante
+                    $('#registerCampus, #registerSchedule, #registerCareer').prop('required', true);
+                } else {
+                    $('#studentFields').slideUp(300);
+                    $('#isColaboradorCheck').prop('disabled', false);
+                    // Quitar el requerido de los campos de estudiante
+                    $('#registerCampus, #registerSchedule, #registerCareer').prop('required', false);
+                }
+            });
+
+            $('#isColaboradorCheck').change(function() {
+                if(this.checked) {
+                    $('#colaboradorFields').slideDown(300);
+                    $('#isStudentCheck').prop('disabled', true)
+
+                    // Hacer requeridos los campos de estudiante
+                    $('#registerRol, #registerCampusColaborador').prop('required', true);
+                } else {
+                    $('#colaboradorFields').slideUp(300);
+                    $('#isStudentCheck').prop('disabled', false)
+
+                    // Quitar el requerido de los campos de estudiante
+                    $('#registerRol, #registerCampusColaborador').prop('required', false);
+                }
+            });
+            
+            // Alternar visibilidad de contraseña
+            $('.password-toggle').click(function() {
+                const input = $(this).prevAll('input');
+                const type = input.attr('type') === 'password' ? 'text' : 'password';
+                input.attr('type', type);
+                
+                // Cambiar icono
+                $(this).toggleClass('fa-eye fa-eye-slash');
+            });
+            
+           
+            
+            // Validar que las contraseñas coincidan en el registro
+            $('#registerConfirmPassword').on('keyup', function() {
+                if ($('#registerPassword').val() !== $('#registerConfirmPassword').val()) {
+                    this.setCustomValidity('Las contraseñas no coinciden');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+            
+            // Ajustar el slider cuando cambia el tamaño de la ventana
+            $(window).resize(function() {
+                moveSlider($('.auth-tabs .nav-link.active'));
+            });
+        });
+
+
+        const formRegistro = document.getElementById("registroFormulario");
+        const botonSbmt = document.getElementById('submitCrearCuenta');
+
+        formRegistro.addEventListener("submit", async (e) => {
+            const estudianteCheck = document.getElementById('isStudentCheck')
+            botonSbmt.disabled = true;
+            botonSbmt.textContent = "Cargando...";
+            e.preventDefault(); // Evita que se recargue la página
+            const formData = new FormData(e.target);
+
+            const eventData = Object.fromEntries(formData);
+             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+            if (!passwordRegex.test(eventData.passwordRegistro)) {
+                passwordError.textContent = "La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y un símbolo.";
+                passwordError.style.display = "block";
+                botonSbmt.disabled = false;
+                botonSbmt.textContent = "Crear cuenta";
+                return;
+            }
+
+            if(!estudianteCheck.checked){
+                eventData.sede =  null
+                eventData.jornada =  null
+                eventData.carrera =  null
+            }
+
+             const res = await fetch('/auth/registro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(eventData)
+            }); 
+
+  
+            if (res.ok) {
+                
+                
+                Swal.fire(
+                'Registro éxitoso!',
+                'Se le enviará un correo electrónico cuando su cuenta sea activada',
+                'success'
+                ).then(() => {
+                botonSbmt.disabled = false;
+                botonSbmt.textContent = "Crear cuenta";
+                window.location.reload();
+                });
+
+            } else {
+                const data = await res.json();
+                Swal.fire('Error', data.error || 'Error desconocido', 'error');
+                botonSbmt.disabled = false;
+                botonSbmt.textContent = "Crear cuenta";
+            }
+
+        });
+
+        const formLogin = document.getElementById('loginFormulario')
+
+        formLogin.addEventListener('submit', async(e)=>{
+            e.preventDefault()
+            let formData = new FormData(e.target);
+            const eventData = Object.fromEntries(formData);
+
+            const res = await fetch('/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(eventData)
+            });
+
+  
+            if (res.ok) {
+                
+                    const data = await res.json();
+
+                Swal.fire(
+                'Éxitoso!',
+                'Bienvenido de nuevo.',
+                'success'
+                ).then(() => {
+                window.location.href = data.redirect;
+
+                });
+
+            } else {
+                const data = await res.json();
+                Swal.fire('Error', data.error || 'Error desconocido', 'error');
+               
+            }
+
+        })
+
+
+        document.getElementById("recoverForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const emailRecuperar = document.getElementById("recoverEmail").value.trim();
+            const botonSbmt = e.target.querySelector("button[type=submit]");
+
+            if (!emailRecuperar) {
+                Swal.fire('Error', 'Por favor ingrese un correo válido', 'error');
+                return;
+            }
+
+            try {
+                // 🔹 deshabilitar botón mientras se procesa
+                botonSbmt.disabled = true;
+                botonSbmt.textContent = "Enviando...";
+
+                const response = await fetch("/auth/recuperar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ emailRecuperar })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    Swal.fire('Error', data.error || 'Error desconocido', 'error');
+                } else {
+                    Swal.fire('Éxito', data.success || 'Si el correo existe, le enviaremos un enlace de recuperación.', 'success');
+                }
+
+            } catch (err) {
+                console.error("Error en fetch:", err);
+                Swal.fire('Error', 'Hubo un error de conexión, intenta de nuevo más tarde.', 'error');
+            } finally {
+                // 🔹 reactivar botón
+                botonSbmt.disabled = false;
+                botonSbmt.textContent = "Recuperar contraseña";
+            }
+        });
+    </script>
+</body>
+</html>

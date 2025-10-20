@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es-cl">
+
+<head>
+    <%- include('../../modulos/head.ejs'); %>
+    <meta name="description" content="Cibervoluntarios de DUOC UC">
+    <meta name="author" content="Tecbit">
+
+    <link href="/css/credencial.css" rel="stylesheet">
+    <title>Cibervoluntarios</title>
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <%- include('../../modulos/slidebar.ejs'); %>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="">
+
+            <!-- Main Content -->
+            <div id="content">
+                <%- include('../../modulos/navbar.ejs'); %>
+                <!-- Begin Page Content -->
+                    <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100 py-1">
+                        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                            <div class="credential-card">
+                                <div class="cyber-pattern"></div>
+                                <div class="security-badge">
+                                    <i class="fas fa-shield-alt"></i>
+                                    VERIFICADO
+                                </div>
+                                
+                                <div class="header-section">
+                                    <h4 class="mb-1"><i class="fas fa-shield-alt me-2"></i>CREDENCIAL DIGITAL</h4>
+                                    <p class="mb-0 opacity-75">Cibervoluntario</p>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <div class="avatar-container">
+                                         <div class="user-avatar avatar-<%= Usuario.icono %>" id="mainAvatar" data-id-usuario="<%= Usuario.ID %>">
+                                    <%= Usuario.Nombre.substring(0, 1) %><%= Usuario.Apellido_P.substring(0, 1) %>
+                                </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-section">
+                                    <div class="info-item">
+                                        <div class="info-icon">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div class="info-text">
+                                            <div class="info-label">Nombre Completo</div>
+                                            <div class="info-value"><%= Usuario.Nombre+" "+(Usuario.Apellido_P?Usuario.Apellido_P:'')+" "+(Usuario.Apellido_M?Usuario.Apellido_M:'')%></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="info-item">
+                                        <div class="info-icon">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div class="info-text">
+                                            <div class="info-label">Correo Institucional</div>
+                                            <div class="info-value"><%= Usuario.Correo%></div>
+                                        </div>
+                                    </div>
+                                       <% var nombreSede = '';Sedes.forEach(function(sede) {if (sede.cod_sede === Usuario.cod_sede) {nombreSede = sede.sede;} });%>
+
+                                    <div class="info-item">
+                                        <div class="info-icon">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                        <div class="info-text">
+                                            <div class="info-label">Sede</div>
+                                            <div class="info-value"><%= nombreSede %></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="qr-section">
+                                    <div class="qr-code" id="qr-code">
+                                    </div>
+                                    <p class="mb-0 text-muted small">
+                                        <i class="fas fa-qrcode me-1"></i>
+                                        Escanea para verificar credenciales
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <%- include('../../modulos/footer.ejs'); %>
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    
+    <%- include('../../modulos/scripts_globales.ejs'); %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script type="text/javascript">
+        new QRCode(document.getElementById("qr-code"), {
+            text: "https://cibervoluntarios.cittpass.cl/validar_credencial/<%=Usuario.ID%>",
+            width: 120,
+            height: 120,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+    </script>
+
+</body>
+
+</html>

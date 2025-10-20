@@ -1,0 +1,208 @@
+<script>
+    document.querySelectorAll('.btn-eliminar-evento').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const usuarioID = btn.getAttribute('data-id');
+            
+            const Usuario= btn.getAttribute('data-usuario');
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¡Esta acción eliminará al usuario: '+Usuario+'!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const res = await fetch(`/dashboard/usuarios/api/usuarios/${usuarioID}`, {
+                            method: 'DELETE'
+                        });
+
+                        if (res.ok) {
+                            Swal.fire(
+                                '¡Eliminado!',
+                                'El usuario: '+Usuario+' ha sido eliminado.',
+                                'success'
+                            ).then(() => {
+                                // Recarga o actualiza la lista
+                                window.location.reload();
+                            });
+                        } else {
+                            const data = await res.json();
+                            Swal.fire(
+                                'Error',
+                                data.error || 'Error desconocido',
+                                'error'
+                            );
+                        }
+                    } catch (error) {
+                        console.error('Error eliminando evento:', error);
+                        Swal.fire(
+                            'Error',
+                            'Error al eliminar el usuario',
+                            'error'
+                        );
+                    }
+                }
+            });
+        });
+    });
+
+</script>
+
+
+<script>
+    document.querySelectorAll('.btn-actualizar-estado').forEach(btn => {
+        btn.addEventListener('change', async() => {
+            const usuarioID = btn.getAttribute('data-id');
+            const Usuario= btn.getAttribute('data-Usuario');
+
+            var data=0;
+            if(btn.checked){
+                data=1;
+            }else{
+                data=0;
+            }
+
+            try {
+                const res = await fetch(`/dashboard/usuarios/api/usuarios/${usuarioID}/${data}`, {
+                    method: 'PUT'
+                });
+
+                if (res.ok) {
+                    Swal.fire(
+                        '¡Estado actualizado!',
+                        'El usuario: '+Usuario+' ha sido actualizado.',
+                        'success'
+                    ).then(() => {
+                    });
+                } else {
+                    const data = await res.json();
+                    Swal.fire(
+                        'Error',
+                        data.error || 'Error desconocido',
+                        'error'
+                    ).then(()=>{
+                        window.location.reload();
+                    });
+                }
+            } catch (error) {
+                console.error('Error actualizando usuario:', error);
+                Swal.fire(
+                    'Error',
+                    'Error al eliminar el usuario',
+                    'error'
+                ).then(()=>{
+                    window.location.reload();
+                });
+            }
+    })
+});
+
+</script>
+
+
+
+<script>
+    document.querySelectorAll('.btn-actualizar-lider').forEach(btn => {
+        btn.addEventListener('change', async() => {
+            const usuarioID = btn.getAttribute('data-id');
+            const Usuario= btn.getAttribute('data-Usuario');
+
+            var data=0;
+            if(btn.checked){
+                data=1;
+            }else{
+                data=0;
+            }
+
+            try {
+                const res = await fetch(`/dashboard/usuarios/api/usuarios/lider/${usuarioID}/${data}`, {
+                    method: 'PUT'
+                });
+
+                if (res.ok) {
+                    Swal.fire(
+                        '¡Estado actualizado!',
+                        'El usuario: '+Usuario+' ha sido actualizado.',
+                        'success'
+                    ).then(() => {
+                    });
+                } else {
+                    const data = await res.json();
+                    Swal.fire(
+                        'Error',
+                        data.error || 'Error desconocido',
+                        'error'
+                    ).then(()=>{
+                        window.location.reload();
+                    });
+                }
+            } catch (error) {
+                console.error('Error actualizando usuario:', error);
+                Swal.fire(
+                    'Error',
+                    'Error al eliminar el usuario',
+                    'error'
+                ).then(()=>{
+                    window.location.reload();
+                });
+            }
+    })
+});
+
+</script>
+
+
+<script>
+    document.querySelectorAll('.btn-actualizar-central').forEach(btn => {
+        btn.addEventListener('change', async() => {
+            const usuarioID = btn.getAttribute('data-id');
+            const Usuario= btn.getAttribute('data-Usuario');
+
+            var data=0;
+            if(btn.checked){
+                data=1;
+            }else{
+                data=0;
+            }
+
+            try {
+                const res = await fetch(`/dashboard/usuarios/api/usuarios/central/${usuarioID}/${data}`, {
+                    method: 'PUT'
+                });
+
+                if (res.ok) {
+                    Swal.fire(
+                        '¡Estado actualizado!',
+                        'El usuario: '+Usuario+' ha sido actualizado.',
+                        'success'
+                    ).then(() => {
+                    });
+                } else {
+                    const data = await res.json();
+                    Swal.fire(
+                        'Error',
+                        data.error || 'Error desconocido',
+                        'error'
+                    ).then(()=>{
+                        window.location.reload();
+                    });
+                }
+            } catch (error) {
+                console.error('Error actualizando usuario:', error);
+                Swal.fire(
+                    'Error',
+                    'Error al eliminar el usuario',
+                    'error'
+                ).then(()=>{
+                    window.location.reload();
+                });
+            }
+    })
+});
+
+</script>

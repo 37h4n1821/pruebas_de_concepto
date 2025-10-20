@@ -1,0 +1,22 @@
+{
+    "apps": [
+      {
+        "name": "Cibervoluntarios",
+        "script": "server.mjs",
+        "watch": true,
+        "ignore_watch": ["node_modules", "LOG", "public"],
+        "watch_options": {
+          "usePolling": true
+        },
+        "out_file": "LOG/out.log",
+        "error_file": "LOG/error.log",
+        "merge_logs": true,
+        "log_max_size": "1M",
+        "log_rotate_interval": 1,
+        "log_date_format": "YYYY-MM-DD HH:mm:ss",
+        "env_production": {
+          "NODE_ENV": "production"
+        }
+      }
+    ]
+  }

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es-cl">
+
+<head>
+    <%- include('../../modulos/head.ejs'); %>
+    <meta name="description" content="Cibervoluntarios de DUOC UC">
+    <meta name="author" content="Ethan y Diego">
+
+    <title>Cibervoluntarios</title>
+
+    <link href="/css/graficos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+
+</head>
+
+<body id="page-top" class="sidebar-toggled">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <%- include('../../modulos/slidebar.ejs'); %>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+                <%- include('../../modulos/navbar.ejs'); %>
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Header -->
+                     <!-- Overlay de Construcción -->
+                
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3>Total Cibervoluntarios</h3>
+                            <div class="number"><%=  Usuarios.length %></div>
+                            <div class="change positive">
+                                <i class="fas fa-arrow-up"></i> +<%= PorcentajeUsuarios %>% esta semana
+                            </div>
+                        </div>
+                        <div class="stat-icon icon-blue">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3>Eventos Activos</h3>
+                            <div class="number"><%=  Eventos.length %></div>
+                            <div class="change blue">
+                                <i class="fas fa-calendar"></i> <%=  EventosSemana %> esta semana
+                            </div>
+                        </div>
+                        <div class="stat-icon icon-green">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-info">
+                            <h3>Sedes Participantes</h3>
+                            <div class="number"><%=  Sedes.length %></div>
+                            <div class="change purple">
+                                <i class="fas fa-building"></i> Todas activas
+                            </div>
+                        </div>
+                        <div class="stat-icon icon-purple">
+                            <i class="fas fa-building"></i>
+                        </div>
+                    </div>
+                </div>
+
+               
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-grid">
+                <!-- Voluntarios por Sede -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Cibervoluntarios por Sede</h3>
+                        <div class="chart-legend">
+                            <span class="legend-dot"></span>
+                            <span class="legend-text">Activos</span>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="sedesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Participación Mensual -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Participación Mensual</h3>
+                        <select>
+                            <option>2025</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="participacionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Próximos Eventos y Ranking -->
+            <div class="bottom-grid">
+                <!-- Próximos Eventos -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3>Próximos Eventos</h3>
+                        <a href="/dashboard/eventos/administracion" class="view-all">Ver todos</a>
+                    </div>
+                    <div class="events-list">
+                        <% ProximosEventos.forEach(evento => { %>
+                            <div class="event-item">
+                                <div class="event-icon event-blue">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div class="event-info">
+                                    <h4><%= evento.Nombre_actividad %></h4>
+                                    <div class="location"><%= evento.ubicacion || 'Sede no especificada' %></div>
+                                    <div class="datetime"><%= evento.Fecha_inicio%></div>
+                                </div>
+                                <div class="event-badge badge-green">
+                                    <%= evento.inscritos || 0 %> inscritos
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+
+                </div>
+
+                <!-- Top Voluntarios -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3>Top Coordinadores Cibervoluntarios</h3>
+                        <span class="legend-text">Este mes</span>
+                    </div>
+                    <div class="ranking-list">
+                        <div class="ranking-item">
+                            <div class="rank-number rank-1">1</div>
+                            <div class="user-avatar avatar-1">CC</div>
+                            <div class="user-info">
+                                <div class="name">Citt Central</div>
+                                <div class="sede">Sede Central</div>
+                            </div>
+                            <div class="user-stats">
+                                <div class="hours">8 eventos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            </div>
+            <!-- End of Main Content -->
+
+            <%- include('../../modulos/footer.ejs'); %>
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    
+    
+    <%- include('../../modulos/scripts_globales.ejs'); %>
+
+</body>
+<script>
+
+window.addEventListener('DOMContentLoaded', function () {
+ // Configuración de Chart.js
+        Chart.defaults.color = '#6B7280';
+
+        // Gráfico de Voluntarios por Sede
+        const sedesCtx = document.getElementById('sedesChart').getContext('2d');
+        new Chart(sedesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [<%-  Sedes.map(item => "'"+item.sede+"'") %>],
+                datasets: [{
+                    data: [<%-  Sedes.map(item => item.cantidad_usuarios) %>],
+                    backgroundColor: [<%-  Sedes.map(item => "'"+item.color+"'") %>],
+                    borderWidth: 0,
+                    cutout: '60%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Participación Mensual
+        const participacionCtx = document.getElementById('participacionChart').getContext('2d');
+        new Chart(participacionCtx, {
+            type: 'line',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                datasets: [{
+                    label: 'Voluntarios Activos',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    borderColor: '#3B82F6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#3B82F6',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 800,
+                        grid: {
+                            color: '#F3F4F6'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                }
+            }
+        });
+
+        // Animación de números al cargar
+        function animateNumbers() {
+            const numbers = [
+                { element: document.querySelector('.number'), target: 1247, duration: 2000 },
+                { element: document.querySelectorAll('.number')[1], target: 23, duration: 1500 },
+                { element: document.querySelectorAll('.number')[2], target: 12, duration: 1000 },
+                { element: document.querySelectorAll('.number')[3], target: 156, duration: 1800 }
+            ];
+
+            numbers.forEach(({ element, target, duration }) => {
+                let start = 0;
+                const increment = target / (duration / 16);
+                const timer = setInterval(() => {
+                    start += increment;
+                    if (start >= target) {
+                        element.textContent = target.toLocaleString();
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(start).toLocaleString();
+                    }
+                }, 16);
+            });
+        }
+    
+    });
+       
+</script>
+
+</html>

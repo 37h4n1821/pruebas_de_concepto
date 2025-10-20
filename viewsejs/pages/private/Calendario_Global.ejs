@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es-cl">
+
+<head>
+    <%- include('../../modulos/head.ejs'); %>
+    <meta name="description" content="Cibervoluntarios de DUOC UC">
+    <meta name="author" content="Tecbit">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <title>Cibervoluntarios</title>
+    <style>
+        /* Fondo transparente del swal */
+        .swal2-popup {
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        /* Quitar fondo oscuro de atrás */
+        .swal2-backdrop-show {
+            background: rgba(0,0,0,0) !important;
+        }
+    </style>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        .swal2-popup {
+            font-family: 'Inter', sans-serif !important;
+        }
+        .card-header{
+            background-color: transparent;
+            border-color: transparent;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary i {
+            margin-right: 0.5rem;
+        }
+        
+        .modal-container {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 42rem;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1rem 1rem 0 0;
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: white;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .close-btn:hover {
+            color: #e5e7eb;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .header-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            padding: 0.75rem;
+            margin-right: 1rem;
+        }
+        
+        .header-icon i {
+            font-size: 1.5rem;
+        }
+        
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .header-subtitle {
+            color: #bfdbfe;
+            margin: 0;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-card {
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid;
+            transition: all 0.2s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .card-blue {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-color: #93c5fd;
+        }
+        
+        .card-green {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border-color: #86efac;
+        }
+        
+        .card-purple {
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border-color: #c4b5fd;
+        }
+        
+        .card-orange {
+            background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+            border-color: #fb923c;
+        }
+        
+        .card-indigo {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border-color: #a5b4fc;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-icon {
+            margin-right: 0.75rem;
+            font-size: 1rem;
+        }
+        
+        .card-icon.blue { color: #2563eb; }
+        .card-icon.green { color: #16a34a; }
+        .card-icon.purple { color: #9333ea; }
+        .card-icon.orange { color: #ea580c; }
+        .card-icon.indigo { color: #4f46e5; }
+        
+        .card-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+            font-size: 0.875rem;
+        }
+        
+        .card-text {
+            color: #374151;
+            font-weight: 500;
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .card-subtext {
+            color: #6b7280;
+            margin: 0;
+        }
+        
+        .card-success {
+            color: #16a34a;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .sede-card {
+            background: linear-gradient(90deg, #e0e7ff 0%, #f3e8ff 100%);
+            border: 1px solid #a5b4fc;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .sede-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .info-section {
+            background-color: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-section h3 {
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0 0 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-section h3 i {
+            color: #2563eb;
+            margin-right: 0.5rem;
+        }
+        
+        .info-section p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        @media (min-width: 640px) {
+            .buttons-container {
+                flex-direction: row;
+            }
+        }
+        
+        .btn-gradient {
+            flex: 1;
+            background: linear-gradient(90deg, #2563eb 0%, #9333ea 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-gradient:hover {
+            background: linear-gradient(90deg, #1d4ed8 0%, #7c3aed 100%);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .btn-gradient i {
+            margin-right: 0.5rem;
+        }
+        
+        .btn-secondary {
+            flex: 1;
+            background-color: #e5e7eb;
+            color: #374151;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .btn-secondary i {
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
+
+    <style>
+        #calendar {
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+    </style>
+    
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <%- include('../../modulos/slidebar.ejs'); %>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+                <%- include('../../modulos/navbar.ejs'); %>
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col mb-2">
+                            <div class="card py-1 border-bottom-secondary d-flex justify-content-center">
+                                <div class="card-body">
+                                    <div id='calendar'></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <%- include('../../modulos/footer.ejs'); %>
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.19/locales/es.global.js"></script>
+    
+    <%- include('../../modulos/scripts_globales.ejs'); %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            initialDate: '2025-08-07',
+            headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            },
+            
+            navLinks: true,
+            locale: 'es',
+            events: [
+
+            <% Eventos.forEach(Evento => {
+                %>{
+                    title: '<%=Evento.Nombre %>',
+                    start: '<%=new Date(Evento.Fecha_Inicio_RAW).toISOString() %>',
+                    end:'<%=new Date(Evento.Fecha_Termino_RAW).toISOString() %>',
+                    organizador:{
+                        Nombre:'<%=Evento.Nombre_Responsable %>',
+                        Correo:'<%=Evento.Correo_Responsable %>',
+                        Rol:'<%=Evento.Rol %>'
+                    },
+                    Ubicacion:'<%=Evento.Ubicacion %>'
+                    ,
+                    Codigo:'<%=Evento.Code %>',
+                    Sede:{
+                        Codigo:'<%=Evento.Id_Sede %>',
+                        Nombre:'<%=Evento.Sede_Organizadora %>'
+                    },
+                    publico:{
+                        Capacidad:'<%=Evento.Capacidad %>',
+                        Inscritos:'<%=Evento.Inscritos %>',
+                        
+                    },
+                    activo: '<%=Evento.Registro_Activo %>',
+                    intersede:'<%=Evento.Intersede %>',
+
+                },
+                
+                <%});%>
+            ],
+            
+            eventClick: function(calEvent) {
+                const evento = calEvent.event;
+                const evento_objeto = {
+                        Nombre: evento.title,
+                        fecha_inicio: evento.start,
+                        fecha_termino: evento.end,
+                        ...evento.extendedProps
+                    };
+                
+                Swal.fire({
+                width: '90%',
+                showConfirmButton: false,
+                showCloseButton: false,
+                customClass: {
+                    popup: 'rounded-2xl p-0 overflow-hidden d-flex justify-content-center min-vw-95'
+                },
+                html: `
+                <div class="modal-container min-vw-95">
+                    
+                    <!-- Header -->
+                    <div class="gradient-bg min-vw-95">
+                        <button onclick="Swal.close()" class="close-btn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        
+                        <div class="header-content">
+                            <div class="header-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div>
+                                <h2 class="header-title">${evento_objeto.Nombre}</h2>
+                                <p class="header-subtitle">${evento_objeto.activo === "1" ? "Evento Activo" : "Evento Inactivo"}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contenido del modal -->
+                    <div class="modal-body min-vw-95">
+                        
+                        <!-- Información principal en cards -->
+                        <div class="cards-grid">
+                            
+                            <!-- Fecha y Hora -->
+                            <div class="info-card card-blue">
+                                <div class="card-header">
+                                    <i class="fas fa-calendar card-icon blue"></i>
+                                    <h3 class="card-title">Fecha y Hora</h3>
+                                </div>
+                                <p class="card-text">${new Date(evento_objeto.fecha_inicio).toLocaleDateString("es-CL")}</p>
+                                <p class="card-subtext">${new Date(evento_objeto.fecha_inicio).toLocaleTimeString("es-CL", {hour: '2-digit', minute:'2-digit'})} - ${new Date(evento_objeto.fecha_termino).toLocaleTimeString("es-CL", {hour: '2-digit', minute:'2-digit'})}</p>
+                            </div>
+
+                            <!-- Ubicación -->
+                            <div class="info-card card-green">
+                                <div class="card-header">
+                                    <i class="fas fa-map-marker-alt card-icon green"></i>
+                                    <h3 class="card-title">Ubicación</h3>
+                                </div>
+                                <p class="card-text">${evento_objeto.Ubicacion || "Sin ubicación especificada"}</p>
+                            </div>
+
+                            <!-- Participación -->
+                            <div class="info-card card-purple">
+                                <div class="card-header">
+                                    <i class="fas fa-users card-icon purple"></i>
+                                    <h3 class="card-title">Participación</h3>
+                                </div>
+                                <p class="card-text">${evento_objeto.publico?.Inscritos || 0} inscritos</p>
+                                <p class="card-success">${(evento_objeto.publico?.Capacidad || 0) - (evento_objeto.publico?.Inscritos || 0)} cupos disponibles</p>
+                            </div>
+
+                            <!-- Organizador -->
+                            <div class="info-card card-orange">
+                                <div class="card-header">
+                                    <i class="fas fa-user-tie card-icon orange"></i>
+                                    <h3 class="card-title">Organizador</h3>
+                                </div>
+                                <p class="card-text">${evento_objeto.organizador?.Nombre || "Sin nombre especificado"}</p>
+                                <p class="card-subtext">${evento_objeto.organizador?.Correo || ""}</p>
+                            </div>
+                        </div>
+
+                        <!-- Sede Organizadora -->
+                        <div class="sede-card">
+                            <div class="card-header">
+                                <i class="fas fa-building card-icon indigo"></i>
+                                <h3 class="card-title">Sede Organizadora</h3>
+                            </div>
+                            <p class="card-text">${evento_objeto.Sede?.Nombre || "Sin sede especificada"}</p>
+                        </div>
+
+                        <!-- Descripción adicional -->
+                        <div class="info-section">
+                            <h3>
+                                <i class="fas fa-info-circle"></i>
+                                Sobre el Evento
+                            </h3>
+                            <p>
+                                Únete a nosotros en este evento donde exploraremos las últimas tendencias y 
+                                oportunidades de aprendizaje. Una experiencia enriquecedora con expertos y 
+                                oportunidades de networking.
+                            </p>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="buttons-container">
+                            <button onclick="window.location.href='/inscripcion/${evento_objeto.Codigo}'" class="btn-gradient">
+                                <i class="fas fa-user-plus"></i>
+                                Inscribirse al Evento
+                            </button>
+                            
+                            <button onclick="Swal.close()" class="btn-secondary">
+                                <i class="fas fa-times"></i>
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </div>`
+            });
+
+                
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+
+</body>
+
+</html>

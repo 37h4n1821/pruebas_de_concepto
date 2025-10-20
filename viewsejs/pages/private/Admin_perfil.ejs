@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="es-cl">
+
+<head>
+    <%- include('../../modulos/head.ejs'); %>
+    <meta name="description" content="Cibervoluntarios de DUOC UC">
+    <meta name="author" content="Tecbit">
+    <link href="/css/perfil.css" rel="stylesheet">
+    
+    <title>Cibervoluntarios</title>
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <%- include('../../modulos/slidebar.ejs'); %>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+                <%- include('../../modulos/navbar.ejs');%>
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <div class="profile-card">
+                        <!-- Profile Header -->
+                        <div class="profile-header">
+                          <div class="avatar-section">
+                            <div class="current-avatar" id="currentAvatar">
+                                <div class="user-avatar avatar-<%= Usuario.icono %>" id="mainAvatar" data-id-usuario="<%= Usuario.ID %>">
+                                    <%= Usuario.Nombre.substring(0, 1) %><%= Usuario.Apellido_P.substring(0, 1) %>
+                                </div>
+                                <!-- <div class="avatar-overlay" onclick="triggerFileUpload()">
+                                    <i class="fas fa-camera"></i>
+                                    <span>Cambiar</span>
+                                </div> -->
+                            </div>
+
+                            <input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="handlePhotoUpload(event)">
+
+                            <div class="avatar-toggle" onclick="toggleAvatarOptions()">
+                                <i class="fas fa-chevron-down" id="avatarToggleIcon"></i>
+                                <span>Cambiar estilo</span>
+                            </div>
+
+                            <div class="avatar-options" id="avatarOptions">
+                                <% for (let i = 1; i <= 6; i++) { %>
+                                    <div class="avatar-option avatar-<%= i %>" data-idicono="<%= i %>" onclick="selectAvatarStyle(event, 'avatar-<%= i %>')">
+                                        <%= Usuario.Nombre.substring(0, 1) %><%= Usuario.Apellido_P.substring(0, 1) %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+
+                            
+                            <% var nombreSede = '';Sedes.forEach(function(sede) {if (sede.cod_sede === Usuario.cod_sede) {nombreSede = sede.sede;} });%>
+
+
+                           
+                            <div class="profile-info">
+                                <h2 id="displayName"><%=Usuario.Nombre%> <%=Usuario.Apellido_P%></h2>
+                                <p class="role">Cibervoluntario - <%= nombreSede %></p>
+                                <div class="profile-stats" >
+                                    <div class="stat-item">
+                                        <a class="nav-link collapsed medal-link" href="#" data-toggle="collapse" 
+                                        aria-expanded="true" aria-controls="Insign">
+                                        <i class="fas fa-award medal-bronze medal-disabled"></i>
+                                    </a>
+                                    </div>
+                                    <div class="stat-item">
+                                        <a class="nav-link collapsed medal-link" href="#" data-toggle="collapse"
+                                        aria-expanded="true" aria-controls="Insign">
+                                        <i class="fas fa-award medal-silver medal-disabled"></i>
+                                    </a>
+                                    </div>
+                                    <div class="stat-item">
+                                        <a class="nav-link collapsed medal-link" href="#" data-toggle="collapse" 
+                                        aria-expanded="true" aria-controls="Insign">
+                                        <i class="fas fa-award medal-gold medal-disabled"></i>
+                                    </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                         <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="showSection('profile-admin')">
+                                <i class="fas fa-user-cog"></i>
+                                Administración de perfil
+                            </button>
+                            <button class="action-btn" onclick="showSection('change-password')">
+                                <i class="fas fa-key"></i>
+                                Cambiar contraseña
+                            </button>
+                            <button class="action-btn" onclick="showSection('transfer-request')">
+                                <i class="fas fa-exchange-alt"></i>
+                                Solicitar traspaso de sede
+                            </button>
+                        </div>
+
+
+                        <!-- Profile Administration Modal -->
+                        <div class="modal-section" id="profile-admin">
+                            <div class="modal-header">
+                                <h3><i class="fas fa-user-cog"></i> Administración de Perfil</h3>
+                                <button class="close-btn" onclick="hideSection('profile-admin')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            
+                            <form class="user">
+                                <div class="form-group">
+                                    <label>Nombre</label>
+                                    <input type="text" id="Nombre" placeholder="Nombre" value="<%=Usuario.Nombre%>">
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Apellido Paterno</label>
+                                        <input type="text" id="ApellidoP" placeholder="Apellido Paterno" value="<%=Usuario.Apellido_P%>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Apellido Materno</label>
+                                        <input type="text" id="ApellidoM" placeholder="Apellido Materno" value="<%=Usuario.Apellido_M%>">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Correo Electrónico</label>
+                                    <input type="email" id="Correo" placeholder="Correo electronico" value="<%=Usuario.Correo%>" disabled>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Teléfono</label>
+                                    <input type="phone" id="Telefono" placeholder="Teléfono" value="<%=Usuario.Celular%>">
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="button" class="btn-cancel" onclick="hideSection('profile-admin')">Cancelar</button>
+                                    <button type="button" class="btn-save" id="btnActualizarDatos">Actualizar datos</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Change Password Modal -->
+        <div class="modal-section" id="change-password">
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> Cambiar Contraseña</h3>
+                <button class="close-btn" onclick="hideSection('change-password')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form class="user">
+                <div class="form-group">
+                    <label>Contraseña Actual</label>
+                    <div class="password-input">
+                        <input type="password" id="contra_actual" placeholder="Contraseña actual" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('contra_actual')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nueva Contraseña</label>
+                        <div class="password-input">
+                            <input type="password" id="nueva_contra" placeholder="Nueva contraseña" required oninput="checkPasswordStrength()">
+                            <button type="button" class="password-toggle" onclick="togglePassword('nueva_contra')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <span id="strengthText">Ingresa una contraseña</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Repetir Contraseña</label>
+                        <div class="password-input">
+                            <input type="password" id="nueva_contra_2" placeholder="Repite la contraseña" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('nueva_contra_2')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="hideSection('change-password')">Cancelar</button>
+                    <button type="button" class="btn-save" id="btnActualizarPassword">Actualizar contraseña</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Transfer Request Modal -->
+        <div class="modal-section" id="transfer-request">
+            <div class="modal-header">
+                <h3><i class="fas fa-exchange-alt"></i> Solicitar Traspaso de Sede</h3>
+                <button class="close-btn" onclick="hideSection('transfer-request')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form class="user">
+                <div class="form-group">
+                    <label>Seleccionar Nueva Sede</label>
+                    <select  id="sedeSelector" %>>
+                    <% Sedes.forEach(function(sede) { %>
+                    <option value="<%= sede.cod_sede %>" <% if (sede.cod_sede === Usuario.cod_sede) { %> selected <% } %>>
+                        <%= sede.sede %>
+                    </option>
+                    <% }); %>
+                </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="hideSection('transfer-request')">Cancelar</button>
+                    <button type="button" class="btn-save" id="CambiarSede">Iniciar proceso</button>
+                </div>
+            </form>
+        </div>
+    </div>
+                    <!-- <div class="card-body p-0">
+                         Nested Row within Card Body 
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Administración de perfil</h1>
+                                    </div>
+                                    <form class="user">
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" id="Nombre"
+                                                placeholder="Nombre" value="<%=Usuario.Nombre%>">
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control form-control-user" id="ApellidoP"
+                                                    placeholder="Apellido Paterno" value="<%=Usuario.Apellido_P%>">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control form-control-user" id="ApellidoM"
+                                                    placeholder="Apellido Materno" value="<%=Usuario.Apellido_M%>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-user" id="Correo"
+                                                placeholder="Correo electronico" value="<%=Usuario.Correo%>" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="phone" class="form-control form-control-user" id="Telefono"
+                                                placeholder="Correo electronico" value="<%=Usuario.Celular%>">
+                                        </div>
+
+                                        <a href="#" id="btnActualizarDatos" class="btn btn-primary btn-user btn-block">
+                                            Actualizar datos
+                                        </a>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Cambiar contraseña</h1>
+                                    </div>
+                                    <form class="user">
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user"
+                                                id="contra_actual" placeholder="Contraseña actual">
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <input type="password" class="form-control form-control-user"
+                                                    id="nueva_contra" placeholder="Nueva contraseña">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <input type="password" class="form-control form-control-user"
+                                                    id="nueva_contra_2" placeholder="Repite la contraseña">
+                                            </div>
+                                        </div>
+
+                                        <a href="#" id="btnActualizarPassword" class="btn btn-primary btn-user btn-block">
+                                            Actualizar contraseña
+                                        </a>
+                                    </form>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Solicitar transpaso de sede</h1>
+                                    </div>
+                                    <form class="user">
+                                        <div class="form-group">
+                                            <select class="custom-select" id="sedeSelector" %>>
+                                                <% Sedes.forEach(function(sede) { %>
+                                                <option value="<%= sede.cod_sede %>" <% if (sede.cod_sede === Usuario.cod_sede) { %> selected <% } %>>
+                                                    <%= sede.sede %>
+                                                </option>
+                                                <% }); %>
+                                            </select>
+                                        </div>
+                                        <a href="#" id="CambiarSede" class="btn btn-primary btn-user btn-block">
+                                            Iniciar proceso
+                                        </a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <%- include('../../modulos/footer.ejs'); %>
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <script>
+        let currentAvatarStyle = 'avatar-current';
+        let isInterestsEditing = false;
+        let isBioEditing = false;
+        let avatarOptionsVisible = false;
+
+
+        // Modal Management
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.modal-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function hideSection(sectionId) {
+            document.getElementById(sectionId).classList.remove('active');
+        }
+
+        // Avatar Management
+        function triggerFileUpload() {
+            document.getElementById('photoUpload').click();
+        }
+
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const mainAvatar = document.getElementById('mainAvatar');
+                    mainAvatar.style.backgroundImage = `url(${e.target.result})`;
+                    mainAvatar.style.backgroundSize = 'cover';
+                    mainAvatar.style.backgroundPosition = 'center';
+                    mainAvatar.textContent = '';
+                    
+                    showNotification('Foto actualizada correctamente', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        
+        function selectAvatarStyle(event, style) {
+        const boton = event.currentTarget;
+
+        // Limpiar selección anterior
+        document.querySelectorAll('.avatar-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+
+        boton.classList.add('selected');
+
+        const idIcono = boton.dataset.idicono;
+        const mainAvatar = document.getElementById('mainAvatar');
+        const mainAvatarNav = document.getElementById('mainAvatarNav');
+        const idUsuario = mainAvatar.dataset.idUsuario;
+
+        mainAvatar.className = `user-avatar ${style}`;
+        mainAvatarNav.className = `user-avatarNav ${style}`;
+        mainAvatar.style.backgroundImage = '';
+        mainAvatarNav.style.backgroundImage = '';
+        updateAvatarInitials();
+        showNotification('Estilo de avatar actualizado', 'success');
+
+        fetch(`/dashboard/perfil/icono/${idUsuario}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ID: idUsuario, Icono: idIcono })
+        })
+        .then(res => res.json())
+        .then(data => console.log(data.message))
+        .catch(err => console.error(err));
+    }
+
+
+        function updateAvatarInitials() {
+            const nombre = document.getElementById('Nombre').value;
+            const apellidoP = document.getElementById('ApellidoP').value;
+            const initials = (nombre.charAt(0) + apellidoP.charAt(0)).toUpperCase();
+            
+            document.getElementById('mainAvatar').textContent = initials;
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.textContent = initials;
+            });
+        }
+        // Form Handlers
+        function saveProfileAdmin() {
+            const nombre = document.getElementById('Nombre').value;
+            const apellidoP = document.getElementById('ApellidoP').value;
+            const apellidoM = document.getElementById('ApellidoM').value;
+            
+            // Update display name
+            document.getElementById('displayName').textContent = `${nombre} ${apellidoP}`;
+            
+            // Update avatar initials
+            updateAvatarInitials();
+            
+            hideSection('profile-admin');
+            showNotification('Perfil actualizado correctamente', 'success');
+        }
+
+        // Add event listeners for all buttons with your backend integration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Your original backend integration code
+            document.getElementById('btnActualizarDatos')?.addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                const body = {
+                Nombre: document.getElementById('Nombre').value,
+                ApellidoP: document.getElementById('ApellidoP').value,
+                ApellidoM: document.getElementById('ApellidoM').value,
+                Telefono: document.getElementById('Telefono').value,
+                };
+
+                try {
+                const res = await fetch('/dashboard/perfil/datos', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+                const data = await res.json();
+
+                if (!res.ok || !data.ok) throw new Error(data.message || 'Error');
+
+                await Swal.fire('¡Listo!', data.message, 'success');
+                // Update display name locally
+                document.getElementById('displayName').textContent = `${body.Nombre} ${body.ApellidoP}`;
+                updateAvatarInitials();
+                hideSection('profile-admin');
+                // Opcional: refrescar para ver cambios en la vista/EJS
+                // window.location.reload();
+                } catch (err) {
+                Swal.fire('Error', err.message || 'No fue posible actualizar tus datos.', 'error');
+                }
+            });
+
+                        document.getElementById('btnActualizarPassword')?.addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                const contraActual = document.getElementById('contra_actual').value;
+                const nuevaContra = document.getElementById('nueva_contra').value;
+                const nuevaContra2 = document.getElementById('nueva_contra_2').value;
+
+                // Validaciones del frontend
+                if (!contraActual || !nuevaContra || !nuevaContra2) {
+                    Swal.fire('Error', 'Todos los campos son obligatorios', 'error');
+                    return;
+                }
+
+                if (nuevaContra !== nuevaContra2) {
+                    Swal.fire('Error', 'Las contraseñas no coinciden', 'error');
+                    return;
+                }
+
+                // Validación de contraseña fuerte
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+                if (!passwordRegex.test(nuevaContra)) {
+                    Swal.fire('Contraseña no válida', 'La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y un símbolo.', 'error');
+                    return;
+                }
+
+                const body = {
+                contra_actual: contraActual,
+                nueva_contra: nuevaContra,
+                nueva_contra_2: nuevaContra2,
+                };
+
+                try {
+                const res = await fetch('/dashboard/perfil/password', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                });
+                const data = await res.json();
+
+                if (!res.ok || !data.ok) throw new Error(data.message || 'Error');
+
+                await Swal.fire('¡Contraseña actualizada!', data.message, 'success');
+                // Por seguridad, forzamos nuevo login
+                window.location.href = '/logout';
+                } catch (err) {
+                Swal.fire('Error', err.message || 'No fue posible actualizar tu contraseña.', 'error');
+                }
+            });
+
+            document.getElementById('CambiarSede')?.addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                const cod_sede_nueva = document.getElementById('sedeSelector').value;
+
+                const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Tu usuario será desactivado hasta que la sede receptora te reactive.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#1cc88a',
+                cancelButtonColor: '#e74a3b',
+                confirmButtonText: 'Sí, solicitar cambio',
+                cancelButtonText: 'Cancelar'
+                });
+
+                if (!result.isConfirmed) return;
+
+                try {
+                const res = await fetch('/dashboard/perfil/traspaso', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cod_sede_nueva }),
+                });
+                const data = await res.json();
+
+                if (!res.ok || !data.ok) throw new Error(data.message || 'Error');
+
+                await Swal.fire('Solicitud enviada', data.message, 'success');
+                // Cierra sesión porque el usuario quedó inactivo
+                window.location.href = '/logout';
+                } catch (err) {
+                Swal.fire('Error', err.message || 'No fue posible solicitar el traspaso.', 'error');
+                }
+            });
+        });
+
+        // Password Strength Checker
+        function checkPasswordStrength() {
+            const password = document.getElementById('nueva_contra').value;
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            let text = '';
+            
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            switch (strength) {
+                case 0:
+                case 1:
+                    strengthFill.style.width = '20%';
+                    strengthFill.className = 'strength-fill strength-weak';
+                    text = 'Muy débil';
+                    break;
+                case 2:
+                    strengthFill.style.width = '40%';
+                    strengthFill.className = 'strength-fill strength-weak';
+                    text = 'Débil';
+                    break;
+                case 3:
+                    strengthFill.style.width = '60%';
+                    strengthFill.className = 'strength-fill strength-medium';
+                    text = 'Media';
+                    break;
+                case 4:
+                    strengthFill.style.width = '80%';
+                    strengthFill.className = 'strength-fill strength-medium';
+                    text = 'Fuerte';
+                    break;
+                case 5:
+                    strengthFill.style.width = '100%';
+                    strengthFill.className = 'strength-fill strength-strong';
+                    text = 'Muy fuerte';
+                    break;
+            }
+            
+            strengthText.textContent = text;
+        }
+
+        
+        // Password Toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+
+    
+
+        // Notification System
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                background: ${type === 'success' ? '#16a34a' : '#ef4444'};
+                color: white;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        
+        // Set minimum date for transfer request
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const transferDateInput = document.getElementById('transferDate');
+            if (transferDateInput) {
+                transferDateInput.min = tomorrow.toISOString().split('T')[0];
+            }
+        });
+         const usuario = <%- JSON.stringify(Usuario) %>;
+    console.log("Usuario:", usuario);
+        
+      // Avatar Management
+        function toggleAvatarOptions() {
+            const avatarOptions = document.getElementById('avatarOptions');
+            const toggleIcon = document.getElementById('avatarToggleIcon');
+            const toggleButton = document.querySelector('.avatar-toggle');
+            
+            avatarOptionsVisible = !avatarOptionsVisible;
+            
+            if (avatarOptionsVisible) {
+                avatarOptions.classList.add('show');
+                toggleButton.classList.add('expanded');
+            } else {
+                avatarOptions.classList.remove('show');
+                toggleButton.classList.remove('expanded');
+            }
+        }
+        </script>
+
+
+    
+    
+    <%- include('../../modulos/scripts_globales.ejs'); %>
+
+</body>
+
+</html>

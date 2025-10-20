@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es-cl">
+
+<head>
+    <%- include('../../modulos/head.ejs'); %>
+    <meta name="description" content="Cibervoluntarios de DUOC UC">
+    <meta name="author" content="Tecbit">
+
+    <title>Cibervoluntarios</title>
+
+
+    
+    <link href="/css/modal.css" rel="stylesheet">
+    
+    <link href="/css/credencial.css" rel="stylesheet">
+
+    <style>
+
+    </style>
+
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <%- include('../../modulos/slidebar.ejs'); %>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+                <%- include('../../modulos/navbar.ejs'); %>
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Descargar datos</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= Usuarios.length%> Usuarios en sede</div>
+                                            
+                                            <button type="button" class="btn btn-success mt-3" id="downloadBtn">
+                                                <i class="fas fa-cloud-download-alt mr-2"></i>Descargar usuarios
+                                            </button>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-file-excel fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tasks Card Example -->
+                        <div class="col-xl-6 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Administrando sede:
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="card-body">
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                        <select class="custom-select" id="sedeSelector" <% if (Usuario.rol !== 1) { %> disabled <% } %>>
+                                                            <% Sedes.forEach(function(sede) { %>
+                                                            <option value="<%= sede.cod_sede %>" <% if (sede.cod_sede === SedeSeleccionada) { %> selected <% } %>>
+                                                                <%= sede.sede %>
+                                                            </option>
+                                                            <% }); %>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-school fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pending Requests Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Usuarios pendiente de aprobación</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= Usuarios.filter(obj => obj.Activo === 0).length %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+
+                        <div class="col-xl col-lg-7">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div
+                                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Usuarios sede</h6>
+                                            <div class="dropdown no-arrow">
+                                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-repeat fa-sm fa-fw text-gray-400"></i>
+                                                </a>
+                                                <div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="dataTable" width="100%"
+                                                    cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nombre</th>
+                                                            <th>Correo</th>
+                                                            <th>Telefono</th>
+                                                            <th>Rol</th>
+                                                            <% if (Usuario.rol < 3) { %>
+                                                            <th>Lider</th>
+                                                            <% } %>
+                                                            <% if (Usuario.rol == 1) { %>
+                                                            <th>Central</th>
+                                                            <% } %>
+                                                            
+                                                            <% if (Usuario.rol < 4) { %>
+                                                            <th>Estado</th>
+                                                            <% } %>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% Usuarios.forEach(usuario=>{ %>
+                                                            <tr>
+                                                                <td>
+                                                                    <%= usuario.Nombre+" "+usuario.Apellido_Paterno+" "+usuario.Apellido_Materno%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=usuario.Correo%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=usuario.Celular%>
+                                                                </td>
+                                                                <td>
+                                                                    <%=Roles.find(item => item.ID === usuario.id_rol)?.Descripcion;%>
+                                                                </td>
+                                                                
+                                                                <% if (Usuario.rol < 3) { %>
+                                                                <td>
+                                                                    <% if (usuario.id_rol>2) {%>
+                                                                    <input  class="btn-actualizar-lider"  type="checkbox" data-id='<%= usuario.id_usuario %>' data-Usuario='<%= usuario.Nombre+" "+usuario.Apellido_Paterno+" "+usuario.Apellido_Materno %>' data-toggle="switchbutton" <%= usuario.id_rol===3?'checked':''%>  data-onlabel="Activado" data-offlabel="Desactivado" data-onstyle="success" data-offstyle="secondary">
+                                                                    <% }else{%>
+                                                                        No aplica
+                                                                    
+                                                                </td>
+                                                                <% }%>
+                                                                <% }%>
+                                                                
+                                                                <% if (Usuario.rol == 1) { %>
+
+                                                                <td>
+                                                                    <% if (usuario.id_rol<3) {%>
+                                                                    <input class="btn-actualizar-central" type="checkbox" data-id='<%= usuario.id_usuario %>' data-Usuario='<%= usuario.Nombre+" "+usuario.Apellido_Paterno+" "+usuario.Apellido_Materno %>' data-toggle="switchbutton" <%= usuario.id_rol===1?'checked':''%>  data-onlabel="Activado" data-offlabel="Desactivado" data-onstyle="success" data-offstyle="secondary">
+                                                                    <% }else{%>
+                                                                        No aplica
+                                                                    <% }%>
+                                                                </td>
+                                                                
+                                                                <% }%>
+
+                                                                
+                                                            <% if (Usuario.rol < 4) { %>
+
+                                                                <td>
+                                                                    <input class="btn-actualizar-estado" type="checkbox" data-id='<%= usuario.id_usuario %>' data-Usuario='<%= usuario.Nombre+" "+usuario.Apellido_Paterno+" "+usuario.Apellido_Materno %>' data-toggle="switchbutton" <%= usuario.Activo?'checked':''%>  data-onlabel="Activado" data-offlabel="Desactivado" data-onstyle="success" data-offstyle="secondary">
+                                                                </td>
+                                                            
+                                                            <% } %>
+                                                                <td class="text-center">
+                                                                    <!-- Botón Eliminar (original) -->
+                                                                     <% if (Usuario.rol < 3) { %>
+                                                                    <button type="button"
+                                                                        class="btn btn-danger btn-circle mx-1 btn-eliminar-evento"
+                                                                        data-id="<%= usuario.id_usuario %>"
+                                                                        data-usuario="<%= usuario.Nombre+" "+usuario.Apellido_Paterno+" "+usuario.Apellido_Materno%>"
+                                                                        title="Eliminar evento">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </button>
+                                                                    <% }%>
+
+                                                                    <button type="button"
+                                                                        class="btn btn-info btn-circle mx-1 btn-credencial-usuario"
+                                                                        data-id="<%= usuario.id_usuario %>"
+                                                                        data-usuario="<%= usuario.Nombre+" "+usuario.Apellido_Paterno+" "+usuario.Apellido_Materno%>"
+                                                                        data-icono="<%= usuario.id_Icono%>"
+                                                                        title="Ver credencial">
+                                                                        <i class="fas fa-address-card"></i>
+                                                                    </button>
+                                                                    
+                                                                </td>
+                                                            </tr>
+                                                            <% }); %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <%- include('../../modulos/footer.ejs'); %>
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    
+    <%- include('modulos/modal_editar_usuario.ejs'); %>
+    
+    <%- include('../../modulos/scripts_globales.ejs'); %>
+
+    <script>
+        document.getElementById('sedeSelector').addEventListener('change', function () {
+            const selectedSede = this.value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('sede', selectedSede);
+            window.location.href = url.toString();
+        });
+    </script>
+<script>
+  const downloadBtn   = document.getElementById('downloadBtn');
+  const sedeSelector  = document.getElementById('sedeSelector');
+
+  function parseFilename(headers, fallback){
+    const cd = headers.get('Content-Disposition') || '';
+    const m = cd.match(/filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i);
+    return m && m[1] ? decodeURIComponent(m[1]) : fallback;
+  }
+
+  function progressHTML(pctText='0%'){
+    return `
+      <div class="dl-row">
+        <div class="dl-icon">
+          <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+            <path d="M12 3v10m0 0l4-4m-4 4l-4-4M5 21h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="dl-sub">Generando Excel de usuarios activos…</div>
+        </div>
+      </div>
+      <div class="dl-bar mt-3" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="dl-fill" id="dlFill"></div>
+      </div>
+      <div class="dl-meta"><small>Progreso</small><small id="dlPct">${pctText}</small></div>
+    `;
+  }
+
+  function successHTML(){
+    return `
+      <div class="dl-success">
+        <div class="dl-check"><i class="fas fa-check"></i></div>
+        <h5 class="mb-1">¡Listo!</h5>
+        <div class="dl-sub">Archivo descargado correctamente</div>
+      </div>
+    `;
+  }
+
+  function setProgress(p){
+    const pct = Math.max(0, Math.min(100, p|0));
+    const fill = document.getElementById('dlFill');
+    const pctEl = document.getElementById('dlPct');
+    if (fill) fill.style.width = pct + '%';
+    if (pctEl) pctEl.textContent = pct + '%';
+    const bar = document.querySelector('.dl-bar');
+    if (bar) bar.setAttribute('aria-valuenow', pct);
+  }
+
+  async function downloadUsersExcel(){
+    const sede = encodeURIComponent(sedeSelector.value);
+    const url  = `/dashboard/usuarios/descarga/masiva/excel?sede=${sede}`;
+
+    await Swal.fire({
+      title: 'Descargando',
+      html: progressHTML('0%'),
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      customClass: { popup:'dl-popup', title:'dl-title' },
+      didOpen: async () => {
+        try {
+          const resp = await fetch(url);
+          if (!resp.ok) throw new Error('No se pudo generar el Excel');
+
+          const total = Number(resp.headers.get('Content-Length')) || 0;
+          const filename = parseFilename(resp.headers, `usuarios_activos_sede_${sede}.xlsx`);
+
+          let indeterminateTimer = null;
+          if (!total) {
+            let dir = 1, fake = 10;
+            indeterminateTimer = setInterval(() => {
+              fake += 3 * dir;
+              if (fake >= 92 || fake <= 8) dir *= -1;
+              setProgress(fake);
+            }, 90);
+          }
+
+          const reader = resp.body.getReader();
+          const chunks = [];
+          let received = 0;
+
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+            received += value.length;
+            if (total) setProgress((received / total) * 100);
+          }
+
+          if (indeterminateTimer) clearInterval(indeterminateTimer);
+          setProgress(100);
+
+          const blob = new Blob(chunks, {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(a.href);
+
+          await Swal.update({ title: ' ', html: successHTML() });
+          setTimeout(() => Swal.close(), 900);
+        } catch (err) {
+          console.error(err);
+          Swal.update({
+            icon: 'error',
+            title: 'Error',
+            html: '<div class="dl-sub">No se pudo descargar el archivo. Intenta nuevamente.</div>',
+            showConfirmButton: true,
+            confirmButtonText: 'Cerrar'
+          });
+        }
+      }
+    });
+  }
+
+  downloadBtn.addEventListener('click', downloadUsersExcel);
+</script>
+
+
+
+
+<script>
+document.querySelectorAll('.btn-credencial-usuario').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const usuarioID = btn.getAttribute('data-id');
+    const nombre    = btn.getAttribute('data-usuario');
+    const icono = btn.getAttribute('data-icono');
+    console.log(icono)
+
+    try {
+      const resp = await fetch(`https://cibervoluntarios.cittpass.cl/api/usuarios/obtener/${usuarioID}`);
+      const data = await resp.json();
+
+      if (data.Error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Usuario no encontrado',
+          text: `No se pudo cargar la credencial de ${nombre}`,
+        });
+        return;
+      }
+
+      const credencialHTML = `
+        <div class="credential-card">
+          <div class="cyber-pattern"></div>
+          <div class="security-badge">
+              <i class="fas fa-shield-alt"></i>
+              VERIFICADO
+          </div>
+
+          <div class="header-section">
+              <h4 class="mb-1"><i class="fas fa-shield-alt me-2"></i>CREDENCIAL DIGITAL</h4>
+              <p class="mb-0 opacity-75">Cibervoluntario</p>
+          </div>
+
+          <div class="text-center">
+            <div class="avatar-container">
+                <div class="user-avatar avatar-${icono}" id="mainAvatar" data-id-usuario="${data.id_usuario}">
+                    ${data.Nombre.substring(0, 1)} ${data.Apellido_Paterno.substring(0, 1)}
+                </div>
+            </div>
+          </div>
+
+          <div class="info-section">
+              <div class="info-item">
+                  <div class="info-icon"><i class="fas fa-user"></i></div>
+                  <div class="info-text">
+                      <div class="info-label">Nombre Completo</div>
+                      <div class="info-value">${data.Nombre_Completo}</div>
+                  </div>
+              </div>
+
+              <div class="info-item">
+                  <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                  <div class="info-text">
+                      <div class="info-label">Correo Institucional</div>
+                      <div class="info-value">${data.Correo}</div>
+                  </div>
+              </div>
+
+              <div class="info-item">
+                  <div class="info-icon"><i class="fas fa-building"></i></div>
+                  <div class="info-text">
+                      <div class="info-label">Sede</div>
+                      <div class="info-value">${data.Sede}</div>
+                  </div>
+              </div>
+
+              <div class="info-item">
+                  <div class="info-icon"><i class="fas fa-user-shield"></i></div>
+                  <div class="info-text">
+                      <div class="info-label">Rol</div>
+                      <div class="info-value">${data.Rol}</div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="qr-section">
+              <div class="qr-code" id="qr-code-${data.id_usuario}"></div>
+              <p class="mb-0 text-muted small">
+                  <i class="fas fa-qrcode me-1"></i>
+                  Escanea para verificar credenciales
+              </p>
+          </div>
+        </div>
+      `;
+
+      Swal.fire({
+        title: '',
+        html: credencialHTML,
+        showConfirmButton: false,
+        width: 500,
+        customClass: {
+          popup: 'swal-credencial'
+        },
+        didOpen: () => {
+          new QRCode(document.getElementById(`qr-code-${data.id_usuario}`), {
+            text: `https://cibervoluntarios.cittpass.cl/api/usuarios/obtener/${data.id_usuario}`,
+            width: 120,
+            height: 120
+          });
+        }
+      });
+
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de conexión',
+        text: 'No se pudo obtener la credencial. Intenta nuevamente.'
+      });
+    }
+  });
+});
+</script>
+
+
+
+</body>
+
+</html>

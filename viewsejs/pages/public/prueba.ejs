@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/iconos/Ciber.ico">
+
+    <title>Cibervoluntarios - Registro</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --primary-dark: #2e59d9;
+            --primary-light: #7a8ee3;
+            --secondary: #36b9cc;
+            --success: #1cc88a;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+            --gray: #858796;
+            --gradient-start: #4e73df;
+            --gradient-end: #224abe;
+            --shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-dark) 100%);
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+        
+        .auth-container {
+            background-color: white;
+            border-radius: 1.2rem;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            max-width: 1000px;
+            width: 90%;
+        }
+        
+        .auth-container:hover {
+            box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .illustration-side {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .illustration-side::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+            transform: rotate(30deg);
+        }
+        
+        .illustration-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        
+        .illustration-title {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .illustration-img {
+            max-width: 85%;
+            height: auto;
+            margin: 1.5rem 0;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+            transition: var(--transition);
+        }
+        
+        .illustration-img:hover {
+            transform: scale(1.05);
+        }
+        
+        .illustration-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 1.5rem;
+        }
+        
+        .form-side {
+            padding: 2.5rem;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo-text {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.8rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .logo-text span {
+            color: var(--secondary);
+        }
+        
+        .form-title {
+            text-align: center;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .form-control-user {
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem 0.8rem 3rem;
+            border: 1px solid #e3e6f0;
+            transition: var(--transition);
+        }
+        
+        .form-control-user:focus {
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+            border-color: var(--primary-light);
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            z-index: 5;
+        }
+        
+        .btn-user {
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            background: var(--primary);
+            border: none;
+            transition: var(--transition);
+            box-shadow: 0 2px 5px rgba(78, 115, 223, 0.3);
+        }
+        
+        .btn-user:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(78, 115, 223, 0.4);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .form-check-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .auth-footer a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--gray);
+            z-index: 5;
+        }
+        
+        .student-fields {
+            background-color: #f8f9fc;
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            margin-top: 1rem;
+            display: none;
+            transition: var(--transition);
+        }
+        
+        .form-select {
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem 0.8rem 1.5rem;
+            border: 1px solid #e3e6f0;
+        }
+        
+        .name-fields {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .name-fields .form-group {
+            flex: 1;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .illustration-side {
+                display: none;
+            }
+            
+            .auth-container {
+                width: 85%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .name-fields {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .form-side {
+                padding: 2rem 1.5rem;
+            }
+            
+            .student-fields {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="row g-0">
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="illustration-side">
+                    <div class="illustration-content">
+                        <div class="illustration-title">Conectando voluntarios con causas digitales</div>
+                        <img src="https://i.imgur.com/bguYQFJ.png" class="illustration-img" alt="Cibervoluntarios">
+                        <p class="illustration-text">Únete a nuestra comunidad de cibervoluntarios y ayuda a construir un mundo digital más inclusivo para todos.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-side">
+                    <div class="logo">
+                        <div class="logo-text">Ciber<span>Voluntarios</span></div>
+                    </div>
+                    
+                    <h2 class="form-title">¡Únete a los cibervoluntarios!</h2>
+                    
+                    <form class="user">
+                        <div class="name-fields">
+                            <div class="form-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" class="form-control form-control-user" id="registerName" placeholder="Nombres" required>
+                            </div>
+                            <div class="form-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" class="form-control form-control-user" id="registerPaternal" placeholder="Apellido paterno" required>
+                            </div>
+                            <div class="form-group">
+                                <i class="fas fa-user input-icon"></i>
+                                <input type="text" class="form-control form-control-user" id="registerMaternal" placeholder="Apellido materno" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" class="form-control form-control-user" id="registerEmail" placeholder="Correo electrónico" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <i class="fas fa-phone input-icon"></i>
+                            <input type="tel" class="form-control form-control-user" id="registerPhone" placeholder="Número de celular" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" class="form-control form-control-user" id="registerPassword" placeholder="Contraseña" required>
+                            <i class="fas fa-eye-slash password-toggle" id="toggleRegisterPassword"></i>
+                        </div>
+                        
+                        <div class="form-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" class="form-control form-control-user" id="registerConfirmPassword" placeholder="Repetir contraseña" required>
+                            <i class="fas fa-eye-slash password-toggle" id="toggleRegisterConfirmPassword"></i>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="isStudentCheck">
+                                <label class="form-check-label" for="isStudentCheck">
+                                    Soy estudiante de la institución
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="student-fields" id="studentFields">
+                            <h5 class="mb-3">Información de estudiante</h5>
+                            
+                            <div class="form-group">
+                                <select class="form-select" id="registerCampus">
+                                    <option selected disabled>Selecciona una sede</option>
+                                    <option value="norte">Campus Norte</option>
+                                    <option value="sur">Campus Sur</option>
+                                    <option value="este">Campus Este</option>
+                                    <option value="oeste">Campus Oeste</option>
+                                    <option value="central">Campus Central</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <select class="form-select" id="registerSchedule">
+                                    <option selected disabled>Selecciona una jornada</option>
+                                    <option value="matutina">Matutina</option>
+                                    <option value="vespertina">Vespertina</option>
+                                    <option value="nocturna">Nocturna</option>
+                                    <option value="fin_semana">Fin de semana</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <select class="form-select" id="registerCareer">
+                                    <option selected disabled>Selecciona una carrera</option>
+                                    <option value="ingenieria">Ingeniería de Sistemas</option>
+                                    <option value="medicina">Medicina</option>
+                                    <option value="derecho">Derecho</option>
+                                    <option value="administracion">Administración de Empresas</option>
+                                    <option value="contabilidad">Contabilidad</option>
+                                    <option value="psicologia">Psicología</option>
+                                    <option value="educacion">Educación</option>
+                                    <option value="arquitectura">Arquitectura</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                                <label class="form-check-label" for="termsCheck">Acepto los <a href="#">términos y condiciones</a></label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-user btn-block w-100 mb-3">
+                            Crear cuenta
+                        </button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        ¿Ya tienes una cuenta? <a href="#" id="goToLogin">Inicia sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Alternar visibilidad de contraseña
+            $('.password-toggle').click(function() {
+                const input = $(this).prevAll('input');
+                const type = input.attr('type') === 'password' ? 'text' : 'password';
+                input.attr('type', type);
+                
+                // Cambiar icono
+                $(this).toggleClass('fa-eye fa-eye-slash');
+            });
+            
+            // Mostrar/ocultar campos de estudiante
+            $('#isStudentCheck').change(function() {
+                if(this.checked) {
+                    $('#studentFields').slideDown(300);
+                    // Hacer requeridos los campos de estudiante
+                    $('#registerCampus, #registerSchedule, #registerCareer').prop('required', true);
+                } else {
+                    $('#studentFields').slideUp(300);
+                    // Quitar el requerido de los campos de estudiante
+                    $('#registerCampus, #registerSchedule, #registerCareer').prop('required', false);
+                }
+            });
+            
+            // Validación básica de formularios
+            $('form').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Validar que las contraseñas coincidan
+                if ($('#registerPassword').val() !== $('#registerConfirmPassword').val()) {
+                    alert('Las contraseñas no coinciden');
+                    return false;
+                }
+                
+                // Aquí iría la lógica real de autenticación
+                alert('Formulario enviado. En una implementación real, esto conectaría con el backend.');
+            });
+            
+            // Validar que las contraseñas coincidan en tiempo real
+            $('#registerConfirmPassword').on('keyup', function() {
+                if ($('#registerPassword').val() !== $('#registerConfirmPassword').val()) {
+                    this.setCustomValidity('Las contraseñas no coinciden');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+<script>
+
+    
+app.get('/recuperar/:token', (req, res) => {
+
+    const titulo = req.session.error?.titulo || null;
+    const descripcion = req.session.error?.descripcion || null;
+    const icono = req.session.error?.icono || null;
+    req.session.error = null;
+
+
+    try {
+        const { token } = req.params;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        if (decoded) {
+            res.render('pages_public/page/nueva-contra', { titulo, descripcion, icono, token });
+        }
+    } catch (error) {
+        console.log(error)
+        res.render('pages_public/page/forgot-pass', { titulo: 'Enlace expirado', descripcion: 'El enlace de recuperación ha caducado.', icono: 'error' });
+
+    }
+
+
+});
+
+app.get('/recuperar', (req, res) => {
+
+    const titulo = req.session.error?.titulo || null;
+    const descripcion = req.session.error?.descripcion || null;
+    const icono = req.session.error?.icono || null;
+    req.session.error = null;
+
+
+    res.render('pages_public/page/forgot-pass', { titulo, descripcion, icono });
+});
+
+
+
+
+app.post('/recuperar/:token', async (req, res) => {
+    const { password } = req.body;
+    const { token } = req.params;
+
+    if (!password) {
+        req.session.error = {
+            titulo: 'Error',
+            descripcion: 'Datos faltantes',
+            icono: 'error'
+        };
+        return res.redirect(`/recuperar/${token}`);
+    }
+
+    // Validar que la contraseña cumpla con los requisitos
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+        req.session.error = {
+            titulo: 'Error',
+            descripcion: "La contraseña no cumple con todos nuestros requerimientos.",
+            icono: 'error'
+        };
+        return res.redirect(`/recuperar/${token}`);
+    }
+
+    try {
+        // Verificar el token y extraer el ID del usuario
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id; // Aquí obtenemos el ID del usuario
+        const hashedPassword = await bcrypt.hash(password, salting);
+
+        const [result] = await poolCibervoluntarios.query("UPDATE Usuarios SET Contrasena = ? WHERE ID = ?", [hashedPassword, userId]
+        );
+
+
+        req.session.error = {
+            titulo: 'Éxito',
+            descripcion: 'Tu contraseña ha sido restablecida correctamente.',
+            icono: 'success'
+        };
+        return res.redirect('/login');
+
+    } catch (error) {
+        console.error(error);
+        req.session.error = {
+            titulo: 'Error',
+            descripcion: 'El enlace es inválido o ha expirado.',
+            icono: 'error'
+        };
+        return res.redirect('/recuperar');
+    }
+});
+
+
+
+
+
+</script>

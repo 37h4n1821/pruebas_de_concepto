@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es-cl">
+
+<head>
+    <%- include('../../modulos/head.ejs'); %>
+    <meta name="description" content="Cibervoluntarios de DUOC UC">
+    <meta name="author" content="Tecbit">
+
+    <title>Cibervoluntarios</title>
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <%- include('../../modulos/slidebar.ejs'); %>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+                <%- include('../../modulos/navbar.ejs'); %>
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <h1 class="h3 mb-1 text-gray-800">API'S Públicas para el desarrolo en cibervoluntarios</h1>
+                    <p class="mb-4">En está sección encontraras todas las API'S habilitadas para desarrollo por parte de los cibervoluntarios.</p>
+                    <!-- Content Row -->
+                    <div class="row">
+                        <div class="col mb-2">
+                            <div class="card py-1 border-bottom-secondary d-flex justify-content-center">
+                                <div class="card-body">
+                                    Obtener estado de la API
+                                    <pre><code class="auto">/api</code></pre>
+                                    
+                                    Esta API devuelve un json con información de la API actual.<br>
+                                    Si el servidor no se encuentra activo no devolvera información
+                                    
+                                    <pre><code class="auto">
+{
+  "API": "V1.0.1",
+  "Servicios": "Cibervoluntarios"
+}
+                                    </code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="card py-1 border-bottom-primary d-flex justify-content-center">
+                                <div class="card-body">
+                                    Obtener información de un cibervoluntario
+                                    <pre><code class="auto">/api/usuarios/obtener/:uuid</code></pre>
+                                    
+                                    Esta API devuelve un json de la información básica del cibervoluntario.<br>
+                                    Si el cibervoluntario no está activo, la api no delvolverá la información de este ultimo.<br>
+                                    La uuid la puedes obtener en tu codigo QR.
+                                    
+                                    <pre><code class="auto">
+{
+    Correo: "ejemplo@duocuc.cl",
+    Nombre: "Nombre",
+    Apellido_P: "Apellido P",
+    Apellido_M: "Apellido M",
+    Sede: "Sede",
+    Rol: "Rol"
+}
+                                    </code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card py-1 border-bottom-danger d-flex justify-content-center">
+                                <div class="card-body">
+                                    Obtener información de eventos
+                                    <pre><code class="auto">/api/eventos/obtener</code></pre>
+                                    
+                                    Esta API devuelve un jsonarray de los eventos disponibles.<br>
+                                    
+                                    <pre><code class="auto">
+[
+  {
+    "Code": "A3F2",
+    "Nombre": "prueba 2",
+    "Descripcion": "linda tarde"
+  },
+  {
+    "Code": "3VU1",
+    "Nombre": "prueba 3",
+    "Descripcion": "fff"
+  },
+]
+                                    </code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card py-1 border-bottom-warning d-flex justify-content-center">
+                                <div class="card-body">
+                                    Obtener información de las sedes DUOC UC
+                                    <pre><code class="auto">/api/sedes/obtener</code></pre>
+                                    
+                                    Esta API devuelve la información en jsonarray de las sedes disponibles.
+                                    
+                                    <pre><code class="auto">
+[
+  {
+    "cod_sede": 1,
+    "sede": "Antonio Varas",
+    "codigo": "AV"
+  },
+  {
+    "cod_sede": 2,
+    "sede": "Campus Virtual",
+    "codigo": "OL"
+  },
+]
+                                    </code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <%- include('../../modulos/footer.ejs'); %>
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    
+    
+    <%- include('../../modulos/scripts_globales.ejs'); %>
+
+</body>
+
+</html>
